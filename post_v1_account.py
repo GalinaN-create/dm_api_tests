@@ -9,8 +9,8 @@ payload = json.dumps({
   "password": "login_55"
 })
 headers = {
-  'X-Dm-Auth-Token': 'cillum ex aute in',
-  'X-Dm-Bb-Render-Mode': 'cillum ex aute in',
+  'X-Dm-Auth-Token': '',
+  'X-Dm-Bb-Render-Mode': '',
   'Content-Type': 'application/json',
   'Accept': 'text/plain'
 }
