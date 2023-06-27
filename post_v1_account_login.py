@@ -1,19 +1,19 @@
 import requests
 
 
-def post_v1_account_password():
+def post_v1_account_login():
     """
-    Reset registered user password
+    Authenticate via credentials
     :return:
     """
-    url = "http://localhost:5051/v1/account/password"
+    url = "http://localhost:5051/v1/account/login"
 
     payload = {
-        "login": "login_4",
-        "email": "login_4@login"
+        "login": "admin",
+        "password": "adminadmin",
+        "rememberMe": False
     }
     headers = {
-        'X-Dm-Auth-Token': '',
         'X-Dm-Bb-Render-Mode': '',
         'Content-Type': 'application/json',
         'Accept': 'text/plain'

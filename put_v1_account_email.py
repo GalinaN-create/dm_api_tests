@@ -1,16 +1,17 @@
 import requests
 
 
-def post_v1_account_password():
+def put_v1_account_email():
     """
-    Reset registered user password
+    Change registered user email
     :return:
     """
-    url = "http://localhost:5051/v1/account/password"
+    url = "http://localhost:5051/v1/account/email"
 
     payload = {
-        "login": "login_4",
-        "email": "login_4@login"
+        "login": "admin",
+        "password": "adminadmin",
+        "email": "admin@admin"
     }
     headers = {
         'X-Dm-Auth-Token': '',
@@ -20,7 +21,7 @@ def post_v1_account_password():
     }
 
     response = requests.request(
-        method="POST",
+        method="PUT",
         url=url,
         headers=headers,
         json=payload
