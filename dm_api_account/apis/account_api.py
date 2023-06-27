@@ -1,4 +1,9 @@
 import requests
+from requests import Response
+from ..models.registration_model import registration_model
+from ..models.reset_password_model import reset_password
+from ..models.change_password_model import change_password
+from ..models.change_email_model import change_email
 
 
 class AccountApi:
@@ -6,17 +11,13 @@ class AccountApi:
     def __init__(self, host):
         self.host = host
 
-    def post_v1_account(self):
+    def post_v1_account(self, json: registration_model) -> Response:
         """
         Register new user
+        :param json: registration_model
         :return:
         """
 
-        payload = {
-            "login": "admin5",
-            "email": "admin1@test.ru",
-            "password": "admin55"
-        }
         headers = {
             'X-Dm-Auth-Token': '',
             'X-Dm-Bb-Render-Mode': '',
@@ -38,7 +39,6 @@ class AccountApi:
         :return:
         """
 
-
         headers = {
             'X-Dm-Auth-Token': '',
             'X-Dm-Bb-Render-Mode': '',
@@ -59,7 +59,6 @@ class AccountApi:
         """
         token = '123123123'
 
-
         headers = {
             'X-Dm-Auth-Token': '',
             'X-Dm-Bb-Render-Mode': '',
@@ -74,16 +73,12 @@ class AccountApi:
         )
         return response
 
-    def post_v1_account_password(self):
+    def post_v1_account_password(self, json: reset_password) -> Response:
         """
         Reset registered user password
         :return:
         """
 
-        payload = {
-            "login": "login_4",
-            "email": "login_4@login"
-        }
         headers = {
             'X-Dm-Auth-Token': '',
             'X-Dm-Bb-Render-Mode': '',
@@ -95,22 +90,16 @@ class AccountApi:
             method="POST",
             url=f"{self.host}/v1/account/password",
             headers=headers,
-            json=payload
+            json=json
         )
         return response
 
-    def put_v1_account_password(self):
+    def put_v1_account_password(self, json: change_password) -> Response:
         """
         Change registered user password
         :return:
         """
 
-        payload = {
-            "login": "admin_4",
-            "token": "c05cda57-2a12-4442-8105-b88bf0e9eede",
-            "oldPassword": "admin_44",
-            "newPassword": "admin_4"
-        }
         headers = {
             'X-Dm-Auth-Token': '',
             'X-Dm-Bb-Render-Mode': '',
@@ -122,21 +111,16 @@ class AccountApi:
             method="PUT",
             url=f"{self.host}/v1/account/password",
             headers=headers,
-            json=payload
+            json=json
         )
         return response
 
-    def put_v1_account_email(self):
+    def put_v1_account_email(self, json: change_email) -> Response:
         """
         Change registered user email
         :return:
         """
 
-        payload = {
-            "login": "admin",
-            "password": "adminadmin",
-            "email": "admin@admin"
-        }
         headers = {
             'X-Dm-Auth-Token': '',
             'X-Dm-Bb-Render-Mode': '',
@@ -148,6 +132,6 @@ class AccountApi:
             method="PUT",
             url=f"{self.host}/v1/account/email",
             headers=headers,
-            json=payload
+            json=json
         )
         return response

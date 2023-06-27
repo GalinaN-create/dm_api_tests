@@ -11,7 +11,6 @@ class LoginApi():
         Authenticate via credentials
         :return:
         """
-        url = f"{host}/v1/account/login"
 
         payload = {
             "login": "admin",
@@ -26,7 +25,7 @@ class LoginApi():
 
         response = requests.request(
             method="POST",
-            url=url,
+            url=f"{self.host}/v1/account/login",
             headers=headers,
             json=payload
         )
@@ -37,7 +36,6 @@ class LoginApi():
         Logout as current user
         :return:
         """
-        url = "http://localhost:5051/v1/account/login"
 
         headers = {
             'X-Dm-Auth-Token': '',
@@ -47,7 +45,7 @@ class LoginApi():
 
         response = requests.request(
             method="DELETE",
-            url=url,
+            url=f"{self.host}/v1/account/login",
             headers=headers
         )
         return response
@@ -57,7 +55,6 @@ class LoginApi():
         Logout from every device
         :return:
         """
-        url = "http://localhost:5051/v1/account/login/all"
 
         headers = {
             'X-Dm-Auth-Token': '',
@@ -67,7 +64,7 @@ class LoginApi():
 
         response = requests.request(
             method="DELETE",
-            url=url,
+            url=f"{self.host}/v1/account/login/all",
             headers=headers
         )
         return response
