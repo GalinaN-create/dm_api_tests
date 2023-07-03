@@ -1,4 +1,4 @@
-change_password = {
+change_password_model = {
     "login": "admin_4",
     "token": "c05cda57-2a12-4442-8105-b88bf0e9eede",
     "oldPassword": "admin_44",

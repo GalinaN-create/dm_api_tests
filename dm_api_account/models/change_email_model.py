@@ -1,5 +1,5 @@
-change_email = {
-            "login": "admin",
-            "password": "adminadmin",
-            "email": "admin@admin"
-        }
+change_email_model = {
+    "login": "admin",
+    "password": "adminadmin",
+    "email": "admin@admin"
+}
