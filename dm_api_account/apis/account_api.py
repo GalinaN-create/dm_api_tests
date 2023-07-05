@@ -47,7 +47,7 @@ class AccountApi:
         Activate registered user
         :return:
         """
-        token = '123123123'
+        # token = None
 
         response = self.session.put(
             url=f"{self.host}/v1/account/{token}",

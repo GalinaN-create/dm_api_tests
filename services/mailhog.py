@@ -1,12 +1,13 @@
 import json
 from requests import Response, session
 
+
 class MailhogApi:
-    def __init__(self, host="http://localhost:5025", headers=None):
+    def __init__(self, host="http://localhost:5025"):
         self.host = host
         self.session = session()
 
-    def get_v2_messages(self, limit: int=50) -> Response:
+    def get_v2_messages(self, limit: int = 50) -> Response:
         response = self.session.get(
             url=f"{self.host}/api/v2/messages",
             params={
@@ -28,4 +29,4 @@ class MailhogApi:
 
 
 result = MailhogApi().get_token_from_last_email()
-# print(result)
+print(result)
