@@ -11,6 +11,7 @@ structlog.configure(
 
 def test_post_v1_account_login():
     api = DmApiAccount(host="http://localhost:5051")
+    mailhog = MailhogApi(host='http://localhost:5025')
     json = {
         "login": "admin8",
         "password": "admin8@test.ru",
