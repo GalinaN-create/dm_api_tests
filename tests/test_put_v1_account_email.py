@@ -16,9 +16,9 @@ def test_put_v1_account_email():
     mailhog = MailhogApi(host='http://localhost:5025')
     api = DmApiAccount(host="http://localhost:5051")
     json = {
-        "login": "admin2026",
-        "password": "admin2026admin",
-        "email": "admin2026@admin"
+        "login": "admin2027",
+        "password": "admin2027admin",
+        "email": "admin2027@admin"
     }
     json2 = {
         "login": "admin2027",
@@ -27,12 +27,12 @@ def test_put_v1_account_email():
     }
     response = api.account.post_v1_account(json=json)
     time.sleep(2)
-    assert response.status_code == 201, f'статус код не равен 201, а равен {response.status_code}'
+    assert response.status_code == 201, f'статус код создания аккаунта не равен 201, а равен {response.status_code}'
 
     token = mailhog.get_token_from_last_email()
     response = api.account.put_v1_account_token(token=token)
-    assert response.status_code == 200, f'статус код не равен 200, а равен {response.status_code}'
+    assert response.status_code == 200, f'статус код получения токена не равен 200, а равен {response.status_code}'
 
     response = api.account.put_v1_account_email(json=json2)
-    assert response.status_code == 200, f'статус код не равен 200, а равен {response.status_code}'
+    assert response.status_code == 200, f'статус код смены почты не равен 200, а равен {response.status_code}'
     print(response)
