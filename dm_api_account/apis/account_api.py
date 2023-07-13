@@ -6,6 +6,7 @@ from ..models.change_password_model import change_password_model
 from ..models.change_email_model import change_email_model
 from requests import session
 from restclient.restclient import Restclient
+from dm_api_account.models.user_envelope import UserEnvelopeModel
 
 
 # TODO Причесать код
@@ -54,6 +55,7 @@ class AccountApi:
             path=f"/v1/account/{token}",
             **kwargs
         )
+        UserEnvelopeModel(**response.json())
         return response
 
     def post_v1_account_password(self, json: reset_password_model, **kwargs) -> Response:
