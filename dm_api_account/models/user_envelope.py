@@ -1,6 +1,7 @@
-from pydantic import BaseModel, StrictStr, StrictBool, Field, FutureDate
+from pydantic import BaseModel, StrictStr, StrictBool, Field
 from enum import Enum
 from typing import List, Optional
+from datetime import datetime
 
 
 class Roles(Enum):
@@ -12,7 +13,7 @@ class Roles(Enum):
     SENIOR_MODERATOR = 'SeniorModerator'
 
 
-class Rating:
+class Rating(BaseModel):
     enabled: StrictBool
     quality: int
     quantity: int
@@ -21,16 +22,16 @@ class Rating:
 class User(BaseModel):
     login: StrictStr
     roles: List[Roles]
-    medium_picture_url: Optional[StrictStr] = Field(alias="mediumPictureUrl")
-    small_picture_url: Optional[StrictStr] = Field(alias="smallPictureUrl")
-    status: StrictStr
+    medium_picture_url: Optional[StrictStr] = Field(alias="mediumPictureUrl", default=None)
+    small_picture_url: Optional[StrictStr] = Field(alias="smallPictureUrl", default=None)
+    status: Optional[StrictStr] = Field(default=None)
     rating: Rating
-    online: FutureDate
-    name: StrictStr
-    location: StrictStr
-    registration: FutureDate
+    online: Optional[datetime] = Field(default=None)
+    name: Optional[StrictStr] = Field(default=None)
+    location: Optional[StrictStr] = Field(default=None)
+    registration: Optional[datetime] = Field(default=None)
 
 
-class UserEnvelopeModel:
+class UserEnvelopeModel(BaseModel):
     resource: User
-    metadata: StrictStr
+    metadata: Optional[StrictStr] = Field(default=None)

@@ -1,6 +1,6 @@
 import requests
 from requests import Response
-from ..models.registration_model import registration_model
+from ..models.registration_model import RegistrationModel
 from ..models.reset_password_model import reset_password_model
 from ..models.change_password_model import change_password_model
 from ..models.change_email_model import change_email_model
@@ -18,7 +18,7 @@ class AccountApi:
         if headers:
             self.client.session.headers.update(headers)
 
-    def post_v1_account(self, json: registration_model, **kwargs) -> Response:
+    def post_v1_account(self, json: RegistrationModel, **kwargs) -> Response:
         """
         Register new user
         :param json: registration_model
@@ -27,7 +27,7 @@ class AccountApi:
 
         response = self.client.post(
             path=f"/v1/account",
-            json=json,
+            json=json.model_dump(by_alias=True, exclude_none=True),
             **kwargs
         )
         return response
