@@ -35,8 +35,8 @@ class LoginApi:
         :return:
         """
 
-        response = self.session.delete(
-            url=f"{self.host}/v1/account/login",
+        response = self.client.delete(
+            url=f"/v1/account/login",
             **kwargs
         )
         return response
@@ -47,8 +47,8 @@ class LoginApi:
         :return:
         """
 
-        response = self.session.delete(
-            url=f"{self.host}/v1/account/login/all",
+        response = self.client.delete(
+            url=f"/v1/account/login/all",
             **kwargs
         )
         return response

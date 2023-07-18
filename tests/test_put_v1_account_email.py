@@ -1,5 +1,6 @@
 import time
-
+from dm_api_account.models.registration_model import RegistrationModel
+from dm_api_account.models.change_email_model import ChangeEmail
 import requests
 from services.dm_api_account import DmApiAccount
 from services.mailhog import MailhogApi
@@ -15,16 +16,16 @@ structlog.configure(
 def test_put_v1_account_email():
     mailhog = MailhogApi(host='http://localhost:5025')
     api = DmApiAccount(host="http://localhost:5051")
-    json = {
-        "login": "admin2027",
-        "password": "admin2027admin",
-        "email": "admin2027@admin"
-    }
-    json2 = {
-        "login": "admin2027",
-        "password": "admin2027admin",
-        "email": "admin2027@admin"
-    }
+    json = RegistrationModel(
+        login="admin2027",
+        password="admin2027admin",
+        email="admin2027@admin"
+    )
+    json2 = ChangeEmail(
+        login="admin2027",
+        password="admin2027admin",
+        email="admin2027@admin"
+    )
     response = api.account.post_v1_account(json=json)
     time.sleep(2)
     assert response.status_code == 201, f'статус код создания аккаунта не равен 201, а равен {response.status_code}'

@@ -1,5 +1,8 @@
-change_email_model = {
-    "login": "admin",
-    "password": "adminadmin",
-    "email": "admin@admin"
-}
+from pydantic import BaseModel, StrictStr, Field
+from typing import Optional
+
+
+class ChangeEmail(BaseModel):
+    login: Optional[StrictStr] = Field(default=None)
+    password: Optional[StrictStr] = Field(default=None)
+    email: Optional[StrictStr] = Field(default=None)

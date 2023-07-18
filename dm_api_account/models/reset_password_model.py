@@ -1,4 +1,7 @@
-reset_password_model = {
-    "login": "login_4",
-    "email": "login_4@login"
-}
+from pydantic import BaseModel, StrictStr, Field
+from typing import Optional
+
+
+class ResetPassword(BaseModel):
+    login: Optional[StrictStr] = Field(default=None)
+    email: Optional[StrictStr] = Field(default=None)

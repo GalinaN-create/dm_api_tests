@@ -18,18 +18,18 @@ def test_post_v1_account_login():
     api = DmApiAccount(host="http://localhost:5051")
     mailhog = MailhogApi(host='http://localhost:5025')
     json = RegistrationModel(
-        login="admin304",
-        email="admin304@test.ru",
-        password="admin304"
+        login="admin306",
+        email="admin306@test.ru",
+        password="admin306"
     )
-    json2 = LoginCredentials (
+    json2 = LoginCredentials(
         login=json.login,
         password=json.password,
         rememberMe=True
     )
 
     response = api.account.post_v1_account(json=json)
-    assert response.status_code == 201, f'Статус код ответа должен быть равен 201, но он равен {response.status_code}'
+    assert response.status_code == 201, f'Статус код создания аккаунта должен быть равен 201, но он равен {response.status_code}'
 
     time.sleep(2)
 

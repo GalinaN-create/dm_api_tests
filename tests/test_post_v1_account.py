@@ -17,9 +17,9 @@ def test_post_v1_account():
     mailhog = MailhogApi(host="http://localhost:5025")
     api = DmApiAccount(host="http://localhost:5051")
     json = RegistrationModel(
-        login="admin276",
-        email="admin276@test.ru",
-        password="admin276"
+        login="admin279",
+        email="admin279@test.ru",
+        password="admin279"
     )
     response = api.account.post_v1_account(json=json)
     assert response.status_code == 201, f'Статус код ответа должен быть равен 201, но он равен {response.status_code}'

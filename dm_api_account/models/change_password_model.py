@@ -1,6 +1,10 @@
-change_password_model = {
-    "login": "admin_4",
-    "token": "c05cda57-2a12-4442-8105-b88bf0e9eede",
-    "oldPassword": "admin_44",
-    "newPassword": "admin_4"
-}
+from pydantic import BaseModel, StrictStr, UUID4, Field
+from typing import Optional
+
+
+class ChangePassword(BaseModel):
+    login: Optional[StrictStr] = Field(default=None)
+    token: Optional[UUID4] = Field(default=None)
+    oldPassword: Optional[StrictStr] = Field(default=None)
+    newPassword: Optional[StrictStr] = Field(default=None)
+
