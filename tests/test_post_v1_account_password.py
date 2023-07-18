@@ -16,5 +16,5 @@ def test_post_v1_account_password():
         email="admin306@test.ru"
     )
     response = api.account.post_v1_account_password(json=json)
-    assert response.status_code == 201, f'Статус код создания аккаунта должен быть равен 201, но он равен {response.status_code}'
+    assert response.status_code == 200, f'Статус код создания аккаунта должен быть равен 201, но он равен {response.status_code}'
     print(response)

@@ -2,6 +2,7 @@ import requests
 from services.dm_api_account import DmApiAccount
 from dm_api_account.models.change_password_model import ChangePassword
 
+
 def test_put_v1_account_password():
     api = DmApiAccount(host="http://localhost:5051")
     json = ChangePassword(

@@ -34,4 +34,4 @@ class User(BaseModel):
 
 class UserEnvelopeModel(BaseModel):
     resource: User
-    metadata: Optional[StrictStr] = Field(default=None)
+    metadata: Optional[dict] = Field(default=None)
