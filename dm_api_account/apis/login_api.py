@@ -3,7 +3,7 @@ import requests
 from requests import Response
 from requests import session
 from restclient.restclient import Restclient
-from dm_api_account.models.login_credentials_model import LoginCredentials
+from dm_api_account.models import *
 
 
 class LoginApi:

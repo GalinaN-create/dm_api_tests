@@ -4,7 +4,7 @@ import requests
 from services.dm_api_account import DmApiAccount
 from services.mailhog import MailhogApi
 import structlog
-from dm_api_account.models.registration_model import RegistrationModel
+from dm_api_account.models.registration_model import Registration
 from dm_api_account.models.login_credentials_model import LoginCredentials
 
 structlog.configure(
@@ -17,7 +17,7 @@ structlog.configure(
 def test_post_v1_account_login():
     api = DmApiAccount(host="http://localhost:5051")
     mailhog = MailhogApi(host='http://localhost:5025')
-    json = RegistrationModel(
+    json = Registration(
         login="admin306",
         email="admin306@test.ru",
         password="admin306"

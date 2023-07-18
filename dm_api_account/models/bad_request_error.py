@@ -1,13 +1,20 @@
-# from pydantic import BaseModel, StrictStr, Field
-# from typing import Optional
+# from __future__ import annotations
 #
+# from datetime import datetime
+# from enum import Enum
+# from typing import Any, Dict, List, Optional
+# from uuid import UUID
 #
-# class InvalidProperties(BaseModel):
-#     additional_prop_1: StrictStr = Field(alias='additionalProp1')
-#     additional_prop_2: StrictStr = Field(alias='additionalProp2')
-#     additional_prop_3: StrictStr = Field(alias='additionalProp3')
+# from pydantic import BaseModel, Extra, Field, StrictStr
 #
 #
 # class BadRequestError(BaseModel):
-#     # message: Optional[StrictStr] = Field(default=None)
-#     invalid_properties: Optional[InvalidProperties] = Field(default=None, alias='invalidProperties')
+#     class Config:
+#         extra = Extra.forbid
+#
+#     message: Optional[StrictStr] = Field(None, description='Client message')
+#     invalid_properties: Optional[Dict[str, List[StrictStr]]] = Field(
+#         None,
+#         alias='invalidProperties',
+#         description='Key-value pairs of invalid request properties',
+#     )
