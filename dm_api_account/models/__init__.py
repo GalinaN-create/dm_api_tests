@@ -5,3 +5,4 @@ from ..models.change_email_model import ChangeEmail
 from ..models.user_envelope import UserEnvelope
 from ..models.user_details_envelope import UserDetailsEnvelope
 from ..models.login_credentials_model import LoginCredentials
+from dm_api_account.utilities import validate_request_json

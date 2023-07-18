@@ -14,19 +14,21 @@ class LoginApi:
         if headers:
             self.client.session.headers.update(headers)
 
-    def post_v1_account_login(self, json: LoginCredentials, **kwargs) -> Response:
+    def post_v1_account_login(self, json: LoginCredentials, status_code: int,  **kwargs) -> LoginCredentials | Response:
         """
         Authenticate via credentials
+        :param status_code:
         :param json login_credentials_model
         :return:
         """
 
         response = self.client.post(
             path=f"/v1/account/login",
-            json=json.model_dump(by_alias=True, exclude_none=True),
+            json=json.validate_request_json(json),
             **kwargs
         )
-        LoginCredentials(**response.json())
+        if response.status_code == 200:
+            return LoginCredentials(**response.json())
         return response
 
     def delete_v1_account_login(self, **kwargs):

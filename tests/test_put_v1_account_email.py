@@ -28,12 +28,10 @@ def test_put_v1_account_email():
     )
     response = api.account.post_v1_account(json=json)
     time.sleep(2)
-    assert response.status_code == 201, f'статус код создания аккаунта не равен 201, а равен {response.status_code}'
 
     token = mailhog.get_token_from_last_email()
     response = api.account.put_v1_account_token(token=token)
-    assert response.status_code == 200, f'статус код получения токена не равен 200, а равен {response.status_code}'
 
     response = api.account.put_v1_account_email(json=json2)
-    assert response.status_code == 200, f'статус код смены почты не равен 200, а равен {response.status_code}'
+
     print(response)

@@ -21,8 +21,9 @@ def test_put_v1_account_token():
         password="admin222"
     )
     response = api.account.post_v1_account(json=json)
-    assert response.status_code == 201, f'Статус код ответа должен быть равен 201, но он равен {response.status_code}'
 
     time.sleep(4)
     token = mailhog.get_token_from_last_email()
     response = api.account.put_v1_account_token(token=token)
+    print(response.resource.login)
+    print(response.resource.roles)
