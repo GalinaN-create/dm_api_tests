@@ -2,7 +2,7 @@ import requests
 from services.dm_api_account import DmApiAccount
 from dm_api_account.models.change_password_model import ChangePassword
 from hamcrest import assert_that, has_properties
-from dm_api_account.models.user_envelope import UserRole
+
 
 
 def test_put_v1_account_password():
