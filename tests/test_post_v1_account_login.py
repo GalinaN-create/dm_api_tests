@@ -6,6 +6,8 @@ from services.mailhog import MailhogApi
 import structlog
 from dm_api_account.models.registration_model import Registration
 from dm_api_account.models.login_credentials_model import LoginCredentials
+from hamcrest import assert_that, has_properties
+from dm_api_account.models.user_envelope import UserRole
 
 structlog.configure(
     processors=[
@@ -13,18 +15,18 @@ structlog.configure(
     ]
 )
 
-
+#TODO Готово
 def test_post_v1_account_login():
     api = DmApiAccount(host="http://localhost:5051")
     mailhog = MailhogApi(host='http://localhost:5025')
     json = Registration(
-        login="admin306",
-        email="admin306@test.ru",
-        password="admin306"
+        login="admin318",
+        email="admin318@test.ru",
+        password="admin318"
     )
     json2 = LoginCredentials(
-        login=json.login,
-        password=json.password,
+        login="admin318",
+        password="admin318",
         rememberMe=True
     )
 
@@ -34,7 +36,19 @@ def test_post_v1_account_login():
 
     token = mailhog.get_token_from_last_email()
     response = api.account.put_v1_account_token(token=token)
+    assert_that(response.resource, has_properties(
+        {
+            "login": "admin318",
+            "roles": [UserRole.guest, UserRole.player]
 
-    response = api.login.post_v1_account_login(json=json)
+        }
+    ))
+
+    response = api.login.post_v1_account_login(json=json2)
+    assert_that(response.resource.login,
+                response.resource.roles,
+                response.resource.registration
+
+                )
 
     print(response)

@@ -1,16 +1,22 @@
 import requests
 from services.dm_api_account import DmApiAccount
 from dm_api_account.models.change_password_model import ChangePassword
+from hamcrest import assert_that, has_properties
+from dm_api_account.models.user_envelope import UserRole
 
 
 def test_put_v1_account_password():
     api = DmApiAccount(host="http://localhost:5051")
     json = ChangePassword(
-        login="admin_4",
-        token="c05cda57-2a12-4442-8105-b88bf0e9eede",
-        oldPassword="admin_44",
-        newPassword="admin_4"
+        login="admin317",
+        token="c18c62af-6a27-4e5a-ab64-f63285219096",
+        oldPassword="admin317",
+        newPassword="admin3177"
     )
     response = api.account.put_v1_account_password(json=json)
+    assert_that(response.resource.login,
+                response.resource.roles,
+                response.resource.registration
 
+                )
     print(response)
