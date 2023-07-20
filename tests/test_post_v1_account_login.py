@@ -6,7 +6,7 @@ from services.mailhog import MailhogApi
 import structlog
 from dm_api_account.models.registration_model import Registration
 from dm_api_account.models.login_credentials_model import LoginCredentials
-from hamcrest import assert_that, has_properties
+from hamcrest import assert_that, has_properties, has_entries
 from dm_api_account.models.user_envelope import UserRole
 
 structlog.configure(
@@ -15,18 +15,19 @@ structlog.configure(
     ]
 )
 
-#TODO Готово
+
+# TODO Готово
 def test_post_v1_account_login():
     api = DmApiAccount(host="http://localhost:5051")
     mailhog = MailhogApi(host='http://localhost:5025')
     json = Registration(
-        login="admin318",
-        email="admin318@test.ru",
-        password="admin318"
+        login="admin401",
+        email="admin401@test.ru",
+        password="admin401"
     )
     json2 = LoginCredentials(
-        login="admin318",
-        password="admin318",
+        login="admin401",
+        password="admin401",
         rememberMe=True
     )
 
@@ -38,17 +39,20 @@ def test_post_v1_account_login():
     response = api.account.put_v1_account_token(token=token)
     assert_that(response.resource, has_properties(
         {
-            "login": "admin318",
+            "login": "admin401",
             "roles": [UserRole.guest, UserRole.player]
 
         }
     ))
 
     response = api.login.post_v1_account_login(json=json2)
-    assert_that(response.resource.login,
-                response.resource.roles,
-                response.resource.registration
 
-                )
+    assert_that(response.json(), has_entries(
+        {
+            "resource": has_entries({"login": "admin401",
+                                     "roles": ['Guest', 'Player']}),
+            "metadata": has_entries({"email": "ad..0@te..u"})
+        }
+    ))
 
     print(response)
