@@ -1,9 +1,7 @@
-import time
 from dm_api_account.models.registration_model import Registration
 from dm_api_account.models.change_email_model import ChangeEmail
-import requests
 from services.dm_api_account import DmApiAccount
-from services.mailhog import MailhogApi
+from generic.helpers.mailhog import MailhogApi
 import structlog
 from hamcrest import assert_that, has_properties, all_of, not_, empty, instance_of
 from dm_api_account.models.user_envelope import UserRole

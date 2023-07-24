@@ -1,7 +1,5 @@
-import json
-import requests
 from services.dm_api_account import DmApiAccount
-from services.mailhog import MailhogApi
+from generic.helpers.mailhog import MailhogApi
 from dm_api_account.models.user_envelope import UserRole
 from dm_api_account.models.registration_model import Registration
 import time

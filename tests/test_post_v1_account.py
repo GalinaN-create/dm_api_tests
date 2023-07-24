@@ -1,36 +1,42 @@
 import time
 
-import requests
-from services.dm_api_account import DmApiAccount
-from services.mailhog import MailhogApi
+from services.dm_api_account import Facade
+from generic.helpers.mailhog import MailhogApi
 import structlog
 from dm_api_account.models.registration_model import Registration
-from hamcrest import assert_that, has_properties, starts_with, instance_of, all_of, contains
+from hamcrest import assert_that, has_properties, starts_with, instance_of, all_of
 from dm_api_account.models.user_envelope import UserRole
-
+import generic
 structlog.configure(
     processors=[
         structlog.processors.JSONRenderer(indent=4, sort_keys=True, ensure_ascii=False)
     ]
 )
 
-#TODO готов
+
+# TODO готов
 def test_post_v1_account():
     mailhog = MailhogApi(host="http://localhost:5025")
-    api = DmApiAccount(host="http://localhost:5051")
-    json = Registration(
+    api = Facade(host="http://localhost:5051")
+    # Register new user
+
+    response = api.account.register_new_user(
         login="admin994",
         email="admin994@test.ru",
-        password="admin994"
-    )
-    response = api.account.post_v1_account(json=json)
+        password="admin994")
     print(response)
     time.sleep(4)
 
-    token = mailhog.get_token_from_last_email()
+    # Activate token
+
+    token = generic.helpers.account.activate_register_user()
     response = api.account.put_v1_account_token(token=token)
 
     print(response)
+
+    # login user
+    ...
+
     assert_that(response.resource, all_of(
         has_properties({
             "login": "admin994",
