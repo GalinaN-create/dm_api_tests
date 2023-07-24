@@ -14,28 +14,30 @@ structlog.configure(
     ]
 )
 
-
+#TODO готов
 def test_post_v1_account():
     mailhog = MailhogApi(host="http://localhost:5025")
     api = DmApiAccount(host="http://localhost:5051")
     json = Registration(
-        login="admin280",
-        email="admin280@test.ru",
-        password="admin280"
+        login="admin994",
+        email="admin994@test.ru",
+        password="admin994"
     )
     response = api.account.post_v1_account(json=json)
+    print(response)
     time.sleep(4)
 
     token = mailhog.get_token_from_last_email()
     response = api.account.put_v1_account_token(token=token)
 
+    print(response)
     assert_that(response.resource, all_of(
         has_properties({
-            "login": "admin999",
+            "login": "admin994",
             "roles": [UserRole.guest, UserRole.player]
         }),
         has_properties(
-            {"login": starts_with("admin999")
+            {"login": starts_with("admin994")
              }),
         has_properties({
             "rating": has_properties({
@@ -44,7 +46,6 @@ def test_post_v1_account():
         })
     ))
 
-    print(response)
     #
     #
     # def check_input_json(json):

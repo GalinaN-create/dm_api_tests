@@ -35,7 +35,8 @@ class LoginApi:
         )
         validate_status_code(response, status_code)
         if response.status_code == 200:
-            return response
+            return UserEnvelope(**response.json())
+        return response
 
     def delete_v1_account_login(
             self,

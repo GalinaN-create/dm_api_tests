@@ -6,7 +6,7 @@ from services.mailhog import MailhogApi
 import structlog
 from dm_api_account.models.registration_model import Registration
 from dm_api_account.models.login_credentials_model import LoginCredentials
-from hamcrest import assert_that, has_properties, has_entries
+from hamcrest import assert_that, has_properties, instance_of, all_of, not_, empty
 from dm_api_account.models.user_envelope import UserRole
 
 structlog.configure(
@@ -21,13 +21,13 @@ def test_post_v1_account_login():
     api = DmApiAccount(host="http://localhost:5051")
     mailhog = MailhogApi(host='http://localhost:5025')
     json = Registration(
-        login="admin401",
-        email="admin401@test.ru",
-        password="admin401"
+        login="admin992",
+        email="admin992@test.ru",
+        password="admin992"
     )
     json2 = LoginCredentials(
-        login="admin401",
-        password="admin401",
+        login="admin992",
+        password="admin992",
         rememberMe=True
     )
 
@@ -39,7 +39,7 @@ def test_post_v1_account_login():
     response = api.account.put_v1_account_token(token=token)
     assert_that(response.resource, has_properties(
         {
-            "login": "admin401",
+            "login": "admin992",
             "roles": [UserRole.guest, UserRole.player]
 
         }
@@ -47,12 +47,19 @@ def test_post_v1_account_login():
 
     response = api.login.post_v1_account_login(json=json2)
 
-    assert_that(response.json(), has_entries(
-        {
-            "resource": has_entries({"login": "admin401",
-                                     "roles": ['Guest', 'Player']}),
-            "metadata": has_entries({"email": "ad..0@te..u"})
-        }
+    assert_that(response.resource, all_of(
+        has_properties(
+            {"login": "admin992",
+             "roles": [UserRole.guest, UserRole.player]
+             }),
+        has_properties({
+            "roles": not_(empty())
+        }),
+        has_properties({
+            "rating": has_properties({
+                "enabled": instance_of(bool)
+            })
+        })
     ))
 
     print(response)

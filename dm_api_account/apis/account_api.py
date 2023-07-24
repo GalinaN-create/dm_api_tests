@@ -53,7 +53,7 @@ class AccountApi:
         )
         validate_status_code(response, status_code)
         if response.status_code == 200:
-            UserDetailsEnvelope(**response.json())
+            return UserDetailsEnvelope(**response.json())
         return response
 
     def put_v1_account_token(
@@ -97,13 +97,13 @@ class AccountApi:
         )
         validate_status_code(response, status_code)
         if response.status_code == 200:
-            UserEnvelope(**response.json())
+            return UserEnvelope(**response.json())
         return response
 
     def put_v1_account_password(
             self,
             json: ChangePassword,
-            status_code: int = 200,
+            status_code: int = 201,
             **kwargs
     ) -> UserEnvelope | Response:
         """
@@ -119,9 +119,10 @@ class AccountApi:
             **kwargs
         )
         validate_status_code(response, status_code)
-        if response.status_code == 200:
-            UserEnvelope(**response.json())
-        return response
+        if response.status_code == 201:
+            return UserEnvelope(**response.json())
+        elif response.status_code > 201:
+            return response
 
     def put_v1_account_email(
             self,
@@ -143,5 +144,5 @@ class AccountApi:
         )
         validate_status_code(response, status_code)
         if response.status_code == 200:
-            UserEnvelope(**response.json())
+            return UserEnvelope(**response.json())
         return response
