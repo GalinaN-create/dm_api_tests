@@ -1,6 +1,22 @@
 import json
-from requests import Response, session
+import time
+
+from requests import Response
 from restclient.restclient import Restclient
+
+
+def decorator(fn):
+    def _wrapper(*args, **kwargs):
+        for i in range(5):
+            response = fn(*args, **kwargs)
+            emails = response.json()['items']
+            if len(emails) < 1:
+                print(f'attempt{i}')
+                time.sleep(2)
+                continue
+            else:
+                return response
+    return _wrapper
 
 
 class MailhogApi:
@@ -8,6 +24,7 @@ class MailhogApi:
         self.host = host
         self.client = Restclient(host=host)
 
+    @decorator
     def get_api_v2_messages(self, limit: int = 50) -> Response:
         """
         Get messages by limit
@@ -32,6 +49,24 @@ class MailhogApi:
         token = token_url.split('/')[-1]
 
         return token
+
+    def get_token_by_login(self, login: str, attempt=10):
+        if attempt == 0:
+            raise AssertionError(f'Не удалось получить письмо с логином {login}')
+        emails = self.get_api_v2_messages(limit=100).json()['items']
+        for email in emails:
+            user_data = json.loads(email['Content']['Body'])
+            if login == user_data.get('Login'):
+                token = user_data['ConfirmationLinkUrl'].split('/')[-1]
+                print(token)
+                return token
+        time.sleep(2)
+        return self.get_token_by_login(login=login, attempt=attempt - 1)
+
+
+if __name__ == '__main__':
+    MailhogApi().get_token_by_login("admin995")
+
 #
 #
 # result = MailhogApi().get_token_from_last_email()

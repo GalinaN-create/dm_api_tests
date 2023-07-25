@@ -25,9 +25,9 @@ def test_put_v1_account_email():
         password="admin997",
         email="admin9977@test.ru"
     )
-    response = api.account.post_v1_account(json=json)
+    response = api.account_api.post_v1_account(json=json)
 
-    response = api.account.put_v1_account_email(json=json2)
+    response = api.account_api.put_v1_account_email(json=json2)
     assert_that(response.resource, all_of(
         has_properties(
             {"login": "admin997",

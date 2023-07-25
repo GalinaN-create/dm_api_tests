@@ -14,7 +14,7 @@ def test_put_v1_account_password():
         oldPassword="admin992",
         newPassword="admin9922"
     )
-    response = api.account.put_v1_account_password(json=json)
+    response = api.account_api.put_v1_account_password(json=json)
     assert_that(response.resource, all_of(
         has_properties(
             {"login": "admin992",

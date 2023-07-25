@@ -19,7 +19,7 @@ def test_post_v1_account_password():
         login="admin992",
         email="admin992@test.ru"
     )
-    response = api.account.post_v1_account_password(json=json)
+    response = api.account_api.post_v1_account_password(json=json)
 
     assert_that(response.resource, all_of(
         has_properties(

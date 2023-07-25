@@ -7,6 +7,7 @@ from dm_api_account.models.registration_model import Registration
 from hamcrest import assert_that, has_properties, starts_with, instance_of, all_of
 from dm_api_account.models.user_envelope import UserRole
 import generic
+
 structlog.configure(
     processors=[
         structlog.processors.JSONRenderer(indent=4, sort_keys=True, ensure_ascii=False)
@@ -16,41 +17,31 @@ structlog.configure(
 
 # TODO готов
 def test_post_v1_account():
-    mailhog = MailhogApi(host="http://localhost:5025")
     api = Facade(host="http://localhost:5051")
-    # Register new user
 
+    login = "admin985"
+    email = "admin985@test.ru"
+    password = "admin985"
     response = api.account.register_new_user(
-        login="admin994",
-        email="admin994@test.ru",
-        password="admin994")
-    print(response)
-    time.sleep(4)
+        login=login,
+        email=email,
+        password=password
+    )
 
-    # Activate token
+    api.account.activate_registered_user(login=login)
+    response = api.login.login_user(
+        login=login,
+        password=password
+    )
+    return response
 
-    token = generic.helpers.account.activate_register_user()
-    response = api.account.put_v1_account_token(token=token)
-
-    print(response)
-
-    # login user
-    ...
-
-    assert_that(response.resource, all_of(
-        has_properties({
-            "login": "admin994",
-            "roles": [UserRole.guest, UserRole.player]
-        }),
-        has_properties(
-            {"login": starts_with("admin994")
-             }),
-        has_properties({
-            "rating": has_properties({
-                "enabled": instance_of(bool)
-            })
+    assert_that(response.resource, has_properties({
+        "login": "admin985",
+        "roles": [UserRole.guest, UserRole.player],
+        "rating": has_properties({
+            "enabled": instance_of(bool)
         })
-    ))
+    }))
 
     #
     #

@@ -4,7 +4,8 @@ from generic.helpers.mailhog import MailhogApi
 
 class Account:
     def __init__(self, facade):
-        self.facade = facade
+        from services.dm_api_account import Facade
+        self.facade: Facade = facade
 
     def register_new_user(self, login: str, email: str, password: str):
         response = self.facade.account_api.post_v1_account(
@@ -16,6 +17,9 @@ class Account:
         )
         return response
 
-    def activate_register_user(self, token: str):
-        token = mailhog.get_token_from_last_email()
-        response = self.facade.account_api.put_v1_account_token(token=token)
+    def activate_registered_user(self, login: str):
+        token = self.facade.mailhog.get_token_by_login(login=login)
+        response = self.facade.account_api.put_v1_account_token(
+            token=token
+        )
+        return response

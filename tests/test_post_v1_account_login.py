@@ -30,12 +30,12 @@ def test_post_v1_account_login():
         rememberMe=True
     )
 
-    response = api.account.post_v1_account(json=json)
+    response = api.account_api.post_v1_account(json=json)
 
     time.sleep(2)
 
     token = mailhog.get_token_from_last_email()
-    response = api.account.put_v1_account_token(token=token)
+    response = api.account_api.put_v1_account_token(token=token)
     assert_that(response.resource, has_properties(
         {
             "login": "admin992",

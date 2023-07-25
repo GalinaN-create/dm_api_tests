@@ -13,7 +13,7 @@ structlog.configure(
 
 def test_get_v1_account():
     api = DmApiAccount(host="http://localhost:5051")
-    response = api.account.get_v1_account()
+    response = api.account_api.get_v1_account()
     # assert_that(response.resource.login,
     #             response.resource.roles,
     #             response.resource.registration
