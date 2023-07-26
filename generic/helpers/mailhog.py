@@ -64,11 +64,9 @@ class MailhogApi:
         print('Попытка получить письмо сброса пароля')
         return self.get_token_by_reset_password(login=login, attempt=attempt - 1)
 
-
-# if __name__ == '__main__':
         self.MailhogApi().get_token_by_reset_password("admin954")
-    # self.MailhogApi().get_token_by_reset_password("admin954")
 
+    # self.MailhogApi().get_token_by_reset_password("admin954")
 
     def get_token_by_login(self, login: str, attempt=10):
         if attempt == 0:
@@ -82,6 +80,7 @@ class MailhogApi:
                 return token
         time.sleep(2)
         return self.get_token_by_login(login=login, attempt=attempt - 1)
+
 
 if __name__ == '__main__':
     MailhogApi().get_token_by_login("admin994")

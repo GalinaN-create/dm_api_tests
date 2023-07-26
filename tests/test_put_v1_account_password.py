@@ -15,9 +15,9 @@ structlog.configure(
 # TODO токен из хедеров добавить из след. урока
 def test_put_v1_account_password():
     api = Facade(host="http://localhost:5051")
-    login = "admin951"
-    email = "admin951@test.ru"
-    password = "admin951"
+    login = "admin942"
+    email = "admin942@test.ru"
+    password = "admin942"
     new_password = f'{password}2'
 
     api.account.register_new_user(
