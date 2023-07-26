@@ -16,6 +16,7 @@ def decorator(fn):
                 continue
             else:
                 return response
+
     return _wrapper
 
 
@@ -47,8 +48,27 @@ class MailhogApi:
         emails = self.get_api_v2_messages(limit=1).json()
         token_url = json.loads(emails['items'][0]['Content']['Body'])['ConfirmationLinkUrl']
         token = token_url.split('/')[-1]
-
         return token
+
+    def get_token_by_reset_password(self, login: str, attempt=5):
+        if attempt == 0:
+            raise AssertionError(f'Не удалось получить письмо с логином {login}')
+        emails = self.get_api_v2_messages(limit=100).json()['items']
+        for email in emails:
+            user_data = json.loads(email['Content']['Body'])
+            if login == user_data.get('Login'):
+                token = user_data['ConfirmationLinkUri'].split('/')[-1]
+                print(token)
+                return token
+        time.sleep(2)
+        print('Попытка получить письмо сброса пароля')
+        return self.get_token_by_reset_password(login=login, attempt=attempt - 1)
+
+
+# if __name__ == '__main__':
+        self.MailhogApi().get_token_by_reset_password("admin954")
+    # self.MailhogApi().get_token_by_reset_password("admin954")
+
 
     def get_token_by_login(self, login: str, attempt=10):
         if attempt == 0:
@@ -63,11 +83,5 @@ class MailhogApi:
         time.sleep(2)
         return self.get_token_by_login(login=login, attempt=attempt - 1)
 
-
 if __name__ == '__main__':
-    MailhogApi().get_token_by_login("admin995")
-
-#
-#
-# result = MailhogApi().get_token_from_last_email()
-# print(result)
+    MailhogApi().get_token_by_login("admin994")

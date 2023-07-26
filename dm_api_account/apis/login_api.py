@@ -35,12 +35,12 @@ class LoginApi:
         )
         validate_status_code(response, status_code)
         if response.status_code == 200:
-            return UserEnvelope(**response.json())
+            UserEnvelope(**response.json())
         return response
 
     def delete_v1_account_login(
             self,
-            status_code: int = 200,
+            status_code: int = 204,
             **kwargs
     ) -> Response:
         """
@@ -49,7 +49,7 @@ class LoginApi:
         """
 
         response = self.client.delete(
-            url=f"/v1/account/login",
+            path=f"/v1/account/login",
             **kwargs
         )
         validate_status_code(response, status_code)
@@ -57,7 +57,7 @@ class LoginApi:
 
     def delete_v1_account_login_all(
             self,
-            status_code: int = 200,
+            status_code: int = 204,
             **kwargs
     ) -> Response:
         """
@@ -66,7 +66,7 @@ class LoginApi:
         """
 
         response = self.client.delete(
-            url=f"/v1/account/login/all",
+            path=f"/v1/account/login/all",
             **kwargs
         )
         validate_status_code(response, status_code)

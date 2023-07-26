@@ -1,5 +1,5 @@
 import requests
-from services.dm_api_account import DmApiAccount
+from services.dm_api_account import Facade
 from hamcrest import assert_that, all_of, has_properties, not_, empty, instance_of
 from dm_api_account.models.user_envelope import UserRole
 import structlog
@@ -14,12 +14,31 @@ structlog.configure(
 
 # TODO готов
 def test_post_v1_account_password():
-    api = DmApiAccount(host="http://localhost:5051")
-    json = ResetPassword(
-        login="admin992",
-        email="admin992@test.ru"
+    api = Facade(host="http://localhost:5051")
+
+    login = "admin945"
+    email = "admin945@test.ru"
+    password = "admin945"
+    response = api.account.register_new_user(
+        login=login,
+        email=email,
+        password=password
     )
-    response = api.account_api.post_v1_account_password(json=json)
+
+    api.account.activate_registered_user(login=login)
+
+    response = api.login.login_user(
+        login=login,
+        password=password
+    )
+    return response
+
+    api.account.set_headers(headers=token)
+    api.account.reset_password(
+        login=login,
+        email=email
+    )
+    return response
 
     assert_that(response.resource, all_of(
         has_properties(

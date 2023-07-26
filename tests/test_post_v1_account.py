@@ -22,7 +22,7 @@ def test_post_v1_account():
     login = "admin985"
     email = "admin985@test.ru"
     password = "admin985"
-    response = api.account.register_new_user(
+    api.account.register_new_user(
         login=login,
         email=email,
         password=password

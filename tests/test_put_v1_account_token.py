@@ -14,39 +14,29 @@ structlog.configure(
 
 
 def test_put_v1_account_token():
-    mailhog = MailhogApi(host="http://localhost:5025")
     api = Facade(host="http://localhost:5051")
+    login = "admin995"
+    email = "admin995@test.ru"
+    password = "admin985"
 
-    json1 = Registration(
-        login="admin995",
-        email="admin995@test.ru",
-        password="admin995"
+    api.account.register_new_user(
+        login=login,
+        email=email,
+        password=password
     )
-    response = api.account_api.post_v1_account(json=json1)
-    print(response)
 
-    time.sleep(4)
-    token = mailhog.get_token_from_last_email()
-    response = api.account_api.put_v1_account_token(token=token)
+    response = api.account.activate_registered_user(login=login)
+
     assert_that(response.resource, has_properties(
-            {"login": "admin995",
-             "roles": [UserRole.guest, UserRole.player],
-             "rating": has_properties({
-                 "enabled": instance_of(bool)
-             })
+        {"login": "admin995",
+         "roles": [UserRole.guest, UserRole.player],
+         "rating": has_properties({
+             "enabled": instance_of(bool)
+         })
 
-             }
+         }
     )
                 )
-        # has_properties({
-        #     "roles": not_(empty())
-        # }),
-        # has_properties({
-        #     "rating": has_properties({
-        #         "enabled": instance_of(bool)
-        #     })
-    #     })
-    # ))
 
     # expected_json = {
     #     "resource": {

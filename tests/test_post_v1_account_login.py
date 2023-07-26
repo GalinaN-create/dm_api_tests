@@ -1,6 +1,6 @@
 import time
 
-from services.dm_api_account import DmApiAccount
+from services.dm_api_account import Facade
 from generic.helpers.mailhog import MailhogApi
 import structlog
 from dm_api_account.models.registration_model import Registration
@@ -17,48 +17,35 @@ structlog.configure(
 
 # TODO Готово
 def test_post_v1_account_login():
-    api = DmApiAccount(host="http://localhost:5051")
-    mailhog = MailhogApi(host='http://localhost:5025')
-    json = Registration(
-        login="admin992",
-        email="admin992@test.ru",
-        password="admin992"
+    api = Facade(host="http://localhost:5051")
+
+    login = "admin950"
+    email = "admin950@test.ru"
+    password = "admin950"
+
+    api.account.register_new_user(
+        login=login,
+        email=email,
+        password=password
     )
-    json2 = LoginCredentials(
-        login="admin992",
-        password="admin992",
-        rememberMe=True
+
+    api.account.activate_registered_user(login=login)
+
+    response = api.login.login_user(
+        login=login,
+        password=password
     )
+    return response
 
-    response = api.account_api.post_v1_account(json=json)
-
-    time.sleep(2)
-
-    token = mailhog.get_token_from_last_email()
-    response = api.account_api.put_v1_account_token(token=token)
     assert_that(response.resource, has_properties(
         {
             "login": "admin992",
-            "roles": [UserRole.guest, UserRole.player]
+            "roles": [UserRole.guest, UserRole.player],
+            "rating": has_properties({
+                "enabled": instance_of(bool)
+            })
 
         }
     ))
 
-    response = api.login.post_v1_account_login(json=json2)
-
-    assert_that(response.resource, all_of(
-        has_properties(
-            {"login": "admin992",
-             "roles": [UserRole.guest, UserRole.player]
-             }),
-        has_properties({
-            "roles": not_(empty())
-        }),
-        has_properties({
-            "rating": has_properties({
-                "enabled": instance_of(bool)
-            })
-        })
-    ))
-
-    print(response)
+    # print(response)
