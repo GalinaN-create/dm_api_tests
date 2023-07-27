@@ -45,7 +45,7 @@ class Account:
         return response
 
     def change_password(self, login: str, oldPassword: str, newPassword: str):
-        token = self.facade.mailhog.get_token_by_reset_password()
+        token = self.facade.mailhog.get_token_by_reset_password(login=login)
         response = self.facade.account_api.put_v1_account_password(
             json=ChangePassword(
                 login=login,

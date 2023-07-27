@@ -103,7 +103,7 @@ class AccountApi:
     def put_v1_account_password(
             self,
             json: ChangePassword,
-            status_code: int = 201,
+            status_code: int = 200,
             **kwargs
     ) -> UserEnvelope | Response:
         """
@@ -119,9 +119,9 @@ class AccountApi:
             **kwargs
         )
         validate_status_code(response, status_code)
-        if response.status_code == 201:
+        if response.status_code == 200:
             return UserEnvelope(**response.json())
-        elif response.status_code > 201:
+        elif response.status_code > 200:
             return response
 
     def put_v1_account_email(

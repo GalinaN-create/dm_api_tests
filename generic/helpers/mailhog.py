@@ -53,13 +53,16 @@ class MailhogApi:
     def get_token_by_reset_password(self, login: str, attempt=5):
         if attempt == 0:
             raise AssertionError(f'Не удалось получить письмо с логином {login}')
+
         emails = self.get_api_v2_messages(limit=100).json()['items']
         for email in emails:
             user_data = json.loads(email['Content']['Body'])
-            if login == user_data.get('Login'):
-                token = user_data['ConfirmationLinkUri'].split('/')[-1]
-                print(token)
-                return token
+            confirmation_link_uri = user_data.get('ConfirmationLinkUri')
+            for key, value in user_data.items():
+                if login == user_data.get('Login') and key == 'ConfirmationLinkUri':
+                    token = user_data['ConfirmationLinkUri'].split('/')[-1]
+                    print(token)
+                    return token
         time.sleep(2)
         print('Попытка получить письмо сброса пароля')
         return self.get_token_by_reset_password(login=login, attempt=attempt - 1)
