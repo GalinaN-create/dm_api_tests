@@ -13,9 +13,9 @@ structlog.configure(
 
 def test_get_v1_account():
     api = Facade(host="http://localhost:5051")
-    login = "admin976"
-    email = "admin976@test.ru"
-    password = "admin976"
+    login = "admin918"
+    email = "admin918@test.ru"
+    password = "admin918"
 
     api.account.register_new_user(
         login=login,
@@ -35,5 +35,5 @@ def test_get_v1_account():
     token = api.login.get_auth_token(login=login, password=password)
     api.account.set_headers(headers=token)
 
-    api.account.get_current_user_info()
-
+    response = api.account.get_current_user_info()
+    return response

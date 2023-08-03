@@ -19,9 +19,9 @@ structlog.configure(
 def test_post_v1_account():
     api = Facade(host="http://localhost:5051")
 
-    login = "admin985"
-    email = "admin985@test.ru"
-    password = "admin985"
+    login = "admin919"
+    email = "admin919@test.ru"
+    password = "admin919"
     api.account.register_new_user(
         login=login,
         email=email,
@@ -33,15 +33,15 @@ def test_post_v1_account():
         login=login,
         password=password
     )
-    return response
 
     assert_that(response.resource, has_properties({
-        "login": "admin985",
+        "login": "admin919",
         "roles": [UserRole.guest, UserRole.player],
         "rating": has_properties({
             "enabled": instance_of(bool)
         })
     }))
+    return response
 
     #
     #

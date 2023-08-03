@@ -16,10 +16,10 @@ structlog.configure(
 def test_post_v1_account_password():
     api = Facade(host="http://localhost:5051")
 
-    login = "admin945"
-    email = "admin945@test.ru"
-    password = "admin945"
-    response = api.account.register_new_user(
+    login = "admin921"
+    email = "admin921@test.ru"
+    password = "admin921"
+    api.account.register_new_user(
         login=login,
         email=email,
         password=password
@@ -27,30 +27,25 @@ def test_post_v1_account_password():
 
     api.account.activate_registered_user(login=login)
 
-    response = api.login.login_user(
+    api.login.login_user(
         login=login,
         password=password
     )
-    return response
+    token = api.login.get_auth_token(login=login, password=password)
 
     api.account.set_headers(headers=token)
-    api.account.reset_password(
+    response = api.account.reset_password(
         login=login,
         email=email
     )
-    return response
 
-    assert_that(response.resource, all_of(
-        has_properties(
-            {"login": "admin992",
-             "roles": [UserRole.guest, UserRole.player]
-             }),
-        has_properties({
-            "roles": not_(empty())
-        }),
-        has_properties({
-            "rating": has_properties({
-                "enabled": instance_of(bool)
-            })
-        })
-    ))
+    assert_that(response.json.resource, has_properties(
+        {"login": "admin921",
+         "roles": [UserRole.guest, UserRole.player],
+         "rating": has_properties({
+             "enabled": instance_of(bool)
+         })
+         })
+
+                )
+    return response

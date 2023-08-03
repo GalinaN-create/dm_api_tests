@@ -15,9 +15,9 @@ structlog.configure(
 # TODO токен из хедеров добавить из след. урока
 def test_put_v1_account_password():
     api = Facade(host="http://localhost:5051")
-    login = "admin935"
-    email = "admin935@test.ru"
-    password = "admin935"
+    login = "admin925"
+    email = "admin925@test.ru"
+    password = "admin925"
     new_password = f'{password}2'
 
     api.account.register_new_user(
@@ -43,30 +43,23 @@ def test_put_v1_account_password():
         headers=token
     )
 
-    response = api.account.reset_password(
+    api.account.reset_password(
         login=login,
         email=email
     )
-    print(response)
 
     response = api.account.change_password(
         login=login,
         oldPassword=password,
         newPassword=new_password
     )
-    return response
 
-    # assert_that(response.resource, all_of(
-    #     has_properties(
-    #         {"login": "admin992",
-    #          "roles": [UserRole.guest, UserRole.player]
-    #          }),
-    #     has_properties({
-    #         "roles": not_(empty())
-    #     }),
-    #     has_properties({
-    #         "rating": has_properties({
-    #             "enabled": instance_of(bool)
-    #         })
-    #     })
-    # ))
+    assert_that(response.resource, has_properties(
+        {"login": "admin925",
+         "roles": [UserRole.guest, UserRole.player],
+         "rating": has_properties({
+             "enabled": instance_of(bool)
+         })
+         }),
+                )
+    return response

@@ -15,7 +15,7 @@ def test_delete_v1_account_login():
     login = "admin957"
     email = "admin957@test.ru"
     password = "admin957"
-    response = api.account.register_new_user(
+    api.account.register_new_user(
         login=login,
         email=email,
         password=password

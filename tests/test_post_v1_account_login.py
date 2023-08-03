@@ -35,7 +35,6 @@ def test_post_v1_account_login():
         login=login,
         password=password
     )
-    return response
 
     assert_that(response.resource, has_properties(
         {
@@ -48,4 +47,4 @@ def test_post_v1_account_login():
         }
     ))
 
-    # print(response)
+    return response
