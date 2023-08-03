@@ -41,7 +41,7 @@ def test_post_v1_account():
             "enabled": instance_of(bool)
         })
     }))
-    return response
+
 
     #
     #

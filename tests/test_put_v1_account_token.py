@@ -37,7 +37,6 @@ def test_put_v1_account_token():
          }
     )
                 )
-    return response
 
     # expected_json = {
     #     "resource": {

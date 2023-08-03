@@ -60,6 +60,4 @@ def test_put_v1_account_password():
          "rating": has_properties({
              "enabled": instance_of(bool)
          })
-         }),
-                )
-    return response
+         }))
