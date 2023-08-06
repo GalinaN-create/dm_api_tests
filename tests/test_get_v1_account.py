@@ -1,9 +1,8 @@
 
-def test_get_v1_account(dm_api_facade, orm_db):
-
-    login = "admin918"
-    email = "admin918@test.ru"
-    password = "admin918"
+def test_get_v1_account(dm_api_facade, orm_db, prepare_user):
+    login = prepare_user.login
+    email = prepare_user.email
+    password = prepare_user.password
 
     orm_db.delete_user_by_login(login=login)
 

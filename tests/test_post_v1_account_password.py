@@ -1,10 +1,10 @@
 from hamcrest import assert_that, has_entries
 
 
-def test_post_v1_account_password(dm_api_facade, orm_db):
-    login = "admin803"
-    email = "admin803@test.ru"
-    password = "admin803"
+def test_post_v1_account_password(dm_api_facade, orm_db, prepare_user):
+    login = prepare_user.login
+    email = prepare_user.email
+    password = prepare_user.password
 
     orm_db.delete_user_by_login(login=login)
 
@@ -39,7 +39,7 @@ def test_post_v1_account_password(dm_api_facade, orm_db):
 
     assert_that(response.json()['resource'], has_entries(
         {
-            "login": "admin803",
+            "login": "admin1",
             "roles": ["Guest", "Player"],
             "rating": ({
                 "enabled": True,

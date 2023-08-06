@@ -1,19 +1,5 @@
 import pytest
 from hamcrest import assert_that, has_entries
-from collections import namedtuple
-
-
-@pytest.fixture
-def prepare_user(dm_api_facade, orm_db):
-
-    user = namedtuple('User', 'login, email, password')
-    User = user(login="admin1", email="admin1@test.ru", password="admin1")
-    orm_db.delete_user_by_login(login=User.login)
-    dataset = orm_db.get_user_by_login(login=User.login)
-    assert len(dataset) == 0
-    dm_api_facade.mailhog.delete_all_messages()
-
-    return User
 
 
 def test_post_v1_account(dm_api_facade, orm_db, prepare_user):

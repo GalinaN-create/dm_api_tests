@@ -1,9 +1,8 @@
 
-def test_delete_v1_account_login_all(dm_api_facade, orm_db):
-
-    login = "admin958"
-    email = "admin958@test.ru"
-    password = "admin958"
+def test_delete_v1_account_login_all(dm_api_facade, orm_db, prepare_user):
+    login = prepare_user.login
+    email = prepare_user.email
+    password = prepare_user.password
 
     orm_db.delete_user_by_login(login=login)
 

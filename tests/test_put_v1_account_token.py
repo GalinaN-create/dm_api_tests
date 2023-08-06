@@ -2,10 +2,10 @@ from dm_api_account.models.user_envelope import UserRole
 from hamcrest import assert_that, has_properties, instance_of
 
 
-def test_put_v1_account_token(dm_api_facade, orm_db):
-    login = "admin804"
-    email = "admin804@test.ru"
-    password = "admin804"
+def test_put_v1_account_token(dm_api_facade, orm_db, prepare_user):
+    login = prepare_user.login
+    email = prepare_user.email
+    password = prepare_user.password
 
     orm_db.delete_user_by_login(login=login)
 
@@ -27,7 +27,7 @@ def test_put_v1_account_token(dm_api_facade, orm_db):
     response = dm_api_facade.account.activate_registered_user(login=login)
 
     assert_that(response.resource, has_properties(
-        {"login": "admin804",
+        {"login": "admin1",
          "roles": [UserRole.guest, UserRole.player],
          "rating": has_properties({
              "enabled": instance_of(bool)
