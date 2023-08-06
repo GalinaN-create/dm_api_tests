@@ -6,3 +6,4 @@ pydantic~=2.0.2
 pyhamcrest
 psycopg2
 records~=0.5.3
+sqlalchemy
