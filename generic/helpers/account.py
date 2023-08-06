@@ -55,7 +55,6 @@ class Account:
             )
         )
         return response
-        print(response)
 
     def change_email(self, login: str, password: str, email: str):
         response = self.facade.account_api.put_v1_account_email(

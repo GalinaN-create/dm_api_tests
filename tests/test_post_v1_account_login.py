@@ -1,11 +1,12 @@
 import time
 
+from generic.helpers.dm_db import DmDatabase
 from services.dm_api_account import Facade
 from generic.helpers.mailhog import MailhogApi
 import structlog
 from dm_api_account.models.registration_model import Registration
 from dm_api_account.models.login_credentials_model import LoginCredentials
-from hamcrest import assert_that, has_properties, instance_of, all_of, not_, empty
+from hamcrest import assert_that, has_properties, instance_of, all_of, not_, empty, has_entries
 from dm_api_account.models.user_envelope import UserRole
 
 structlog.configure(
@@ -19,10 +20,22 @@ structlog.configure(
 def test_post_v1_account_login():
     api = Facade(host="http://localhost:5051")
 
-    login = "admin950"
-    email = "admin950@test.ru"
-    password = "admin950"
+    login = "admin807"
+    email = "admin807@test.ru"
+    password = "admin807"
 
+    db = DmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
+
+    db.delete_user_by_login(login=login)
+
+    dataset = db.get_user_by_login(login=login)
+    assert len(dataset) == 0
+
+    api.mailhog.delete_all_messages()
+
+    dataset = db.get_user_by_login(login=login)
+    for row in dataset:
+        assert row['Login'] == login, f'User {login} not registered'
     api.account.register_new_user(
         login=login,
         email=email,
@@ -36,12 +49,14 @@ def test_post_v1_account_login():
         password=password
     )
 
-    assert_that(response.resource, has_properties(
+    assert_that(response.json()['resource'], has_entries(
         {
-            "login": "admin992",
-            "roles": [UserRole.guest, UserRole.player],
-            "rating": has_properties({
-                "enabled": instance_of(bool)
+            "login": "admin807",
+            "roles": ["Guest", "Player"],
+            "rating": ({
+                "enabled": True,
+                "quality": 0,
+                "quantity": 0
             })
 
         }

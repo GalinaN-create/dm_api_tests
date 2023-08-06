@@ -1,4 +1,6 @@
 import requests
+
+from generic.helpers.dm_db import DmDatabase
 from services.dm_api_account import Facade
 import structlog
 
@@ -15,6 +17,19 @@ def test_delete_v1_account_login_all():
     login = "admin958"
     email = "admin958@test.ru"
     password = "admin958"
+
+    db = DmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
+
+    db.delete_user_by_login(login=login)
+
+    dataset = db.get_user_by_login(login=login)
+    assert len(dataset) == 0
+
+    api.mailhog.delete_all_messages()
+
+    dataset = db.get_user_by_login(login=login)
+    for row in dataset:
+        assert row['Login'] == login, f'User {login} not registered'
 
     api.account.register_new_user(
         login=login,

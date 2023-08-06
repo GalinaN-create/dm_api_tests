@@ -5,7 +5,7 @@ from services.dm_api_account import Facade
 from generic.helpers.mailhog import MailhogApi
 import structlog
 from dm_api_account.models.registration_model import Registration
-from hamcrest import assert_that, has_properties, starts_with, instance_of, all_of
+from hamcrest import assert_that, has_properties, starts_with, instance_of, all_of, has_entries
 from dm_api_account.models.user_envelope import UserRole
 import generic
 
@@ -46,7 +46,9 @@ def test_post_v1_account():
         assert row['Login'] == login, f'User {login} registered'
         assert row['Activated'] is False, f'User {login} was not activated'
 
-    api.account.activate_registered_user(login=login)
+    # api.account.activate_registered_user(login=login)
+
+    db.activated_new_user(login=login)
 
     dataset = db.get_user_by_login(login=login)
     for row in dataset:
@@ -57,13 +59,18 @@ def test_post_v1_account():
         password=password
     )
 
-    assert_that(response.resource, has_properties({
-        "login": "admin1",
-        "roles": [UserRole.guest, UserRole.player],
-        "rating": has_properties({
-            "enabled": instance_of(bool)
-        })
-    }))
+    assert_that(response.json()['resource'], has_entries(
+        {
+            "login": "admin1",
+            "roles": ["Guest", "Player"],
+            "rating": ({
+                "enabled": True,
+                "quality": 0,
+                "quantity": 0
+            })
+
+        }
+    ))
 
     #
     #
