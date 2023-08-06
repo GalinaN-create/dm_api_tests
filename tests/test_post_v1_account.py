@@ -1,61 +1,45 @@
-import time
-
-from generic.helpers.dm_db import DmDatabase
-from generic.helpers.orm_db import OrmDatabase
-from services.dm_api_account import Facade
-from generic.helpers.mailhog import MailhogApi
-import structlog
-from dm_api_account.models.registration_model import Registration
-from hamcrest import assert_that, has_properties, starts_with, instance_of, all_of, has_entries
-from dm_api_account.models.user_envelope import UserRole
-import generic
-
-structlog.configure(
-    processors=[
-        structlog.processors.JSONRenderer(indent=4, sort_keys=True, ensure_ascii=False)
-    ]
-)
+import pytest
+from hamcrest import assert_that, has_entries
+from collections import namedtuple
 
 
-# TODO готов
-def test_post_v1_account():
-    api = Facade(host="http://localhost:5051")
+@pytest.fixture
+def prepare_user(dm_api_facade, orm_db):
 
-    login = "admin1"
-    email = "admin1@test.ru"
-    password = "admin1"
-    orm = OrmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
-
-    orm.delete_user_by_login(login=login)
-
-    dataset = orm.get_user_by_login(login=login)
+    user = namedtuple('User', 'login, email, password')
+    User = user(login="admin1", email="admin1@test.ru", password="admin1")
+    orm_db.delete_user_by_login(login=User.login)
+    dataset = orm_db.get_user_by_login(login=User.login)
     assert len(dataset) == 0
+    dm_api_facade.mailhog.delete_all_messages()
 
-    api.mailhog.delete_all_messages()
+    return User
 
-    dataset = orm.get_user_by_login(login=login)
-    for row in dataset:
-        assert row.Login == login, f'User {login} not registered'
 
-    api.account.register_new_user(
+def test_post_v1_account(dm_api_facade, orm_db, prepare_user):
+    login = prepare_user.login
+    email = prepare_user.email
+    password = prepare_user.password
+
+    dm_api_facade.account.register_new_user(
         login=login,
         email=email,
         password=password
     )
-    dataset = orm.get_user_by_login(login=login)
+    dataset = orm_db.get_user_by_login(login=login)
     for row in dataset:
         assert row.Login == login, f'User {login} registered'
-        assert row['Activated'] is False, f'User {login} was not activated'
+        assert row.Activated is False, f'User {login} was not activated'
 
     # api.account.activate_registered_user(login=login)
 
-    orm.activated_new_user(login=login)
+    orm_db.activated_new_user(login=login)
 
-    dataset = orm.get_user_by_login(login=login)
+    dataset = orm_db.get_user_by_login(login=login)
     for row in dataset:
         assert row.Activated is True, f'User {login} not activated'
 
-    response = api.login.login_user(
+    response = dm_api_facade.login.login_user(
         login=login,
         password=password
     )

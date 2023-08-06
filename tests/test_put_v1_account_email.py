@@ -1,53 +1,36 @@
-from dm_api_account.models.registration_model import Registration
-from dm_api_account.models.change_email_model import ChangeEmail
-from generic.helpers.dm_db import DmDatabase
-from generic.helpers.orm_db import OrmDatabase
-from services.dm_api_account import Facade
-from generic.helpers.mailhog import MailhogApi
-import structlog
-from hamcrest import assert_that, has_properties, all_of, not_, empty, instance_of
+from hamcrest import assert_that, has_properties, instance_of
 from dm_api_account.models.user_envelope import UserRole
 
-structlog.configure(
-    processors=[
-        structlog.processors.JSONRenderer(indent=4, sort_keys=True, ensure_ascii=False)
-    ]
-)
 
-
-# TODO готов
-def test_put_v1_account_email():
-    api = Facade(host="http://localhost:5051")
+def test_put_v1_account_email(dm_api_facade, orm_db):
     login = "admin920"
     email = "admin920@test.ru"
     password = "admin920"
 
-    orm = OrmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
+    orm_db.delete_user_by_login(login=login)
 
-    orm.delete_user_by_login(login=login)
-
-    dataset = orm.get_user_by_login(login=login)
+    dataset = orm_db.get_user_by_login(login=login)
     assert len(dataset) == 0
 
-    api.mailhog.delete_all_messages()
+    dm_api_facade.mailhog.delete_all_messages()
 
-    dataset = orm.get_user_by_login(login=login)
+    dataset = orm_db.get_user_by_login(login=login)
     for row in dataset:
         assert row['Login'] == login, f'User {login} not registered'
 
-    api.account.register_new_user(
+    dm_api_facade.account.register_new_user(
         login=login,
         email=email,
         password=password
     )
 
-    api.account.activate_registered_user(login=login)
-    api.login.login_user(
+    dm_api_facade.account.activate_registered_user(login=login)
+    dm_api_facade.login.login_user(
         login=login,
         password=password
     )
 
-    response = api.account.change_email(
+    response = dm_api_facade.account.change_email(
         login=login,
         email=email,
         password=password
@@ -61,5 +44,4 @@ def test_put_v1_account_email():
          }
     )
                 )
-    orm.db.close_connection()
-
+    orm_db.db.close_connection()
