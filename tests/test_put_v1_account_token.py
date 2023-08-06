@@ -1,4 +1,5 @@
 from generic.helpers.dm_db import DmDatabase
+from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
 from generic.helpers.mailhog import MailhogApi
 from dm_api_account.models.user_envelope import UserRole
@@ -19,16 +20,16 @@ def test_put_v1_account_token():
     login = "admin804"
     email = "admin804@test.ru"
     password = "admin804"
-    db = DmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
+    orm = OrmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
 
-    db.delete_user_by_login(login=login)
+    orm.delete_user_by_login(login=login)
 
-    dataset = db.get_user_by_login(login=login)
+    dataset = orm.get_user_by_login(login=login)
     assert len(dataset) == 0
 
     api.mailhog.delete_all_messages()
 
-    dataset = db.get_user_by_login(login=login)
+    dataset = orm.get_user_by_login(login=login)
     for row in dataset:
         assert row['Login'] == login, f'User {login} not registered'
 
@@ -50,6 +51,7 @@ def test_put_v1_account_token():
          }
     )
                 )
+    orm.db.close_connection()
 
     # expected_json = {
     #     "resource": {

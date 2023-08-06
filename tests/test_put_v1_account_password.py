@@ -1,6 +1,7 @@
 import requests
 
 from generic.helpers.dm_db import DmDatabase
+from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
 from dm_api_account.models.change_password_model import ChangePassword
 from hamcrest import assert_that, has_properties, all_of, not_, empty, instance_of
@@ -22,16 +23,16 @@ def test_put_v1_account_password():
     password = "admin925"
     new_password = f'{password}2'
 
-    db = DmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
+    orm = OrmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
 
-    db.delete_user_by_login(login=login)
+    orm.delete_user_by_login(login=login)
 
-    dataset = db.get_user_by_login(login=login)
+    dataset = orm.get_user_by_login(login=login)
     assert len(dataset) == 0
 
     api.mailhog.delete_all_messages()
 
-    dataset = db.get_user_by_login(login=login)
+    dataset = orm.get_user_by_login(login=login)
     for row in dataset:
         assert row['Login'] == login, f'User {login} not registered'
 
@@ -76,3 +77,4 @@ def test_put_v1_account_password():
              "enabled": instance_of(bool)
          })
          }))
+    orm.db.close_connection()

@@ -1,6 +1,7 @@
 from dm_api_account.models.registration_model import Registration
 from dm_api_account.models.change_email_model import ChangeEmail
 from generic.helpers.dm_db import DmDatabase
+from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
 from generic.helpers.mailhog import MailhogApi
 import structlog
@@ -21,16 +22,16 @@ def test_put_v1_account_email():
     email = "admin920@test.ru"
     password = "admin920"
 
-    db = DmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
+    orm = OrmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
 
-    db.delete_user_by_login(login=login)
+    orm.delete_user_by_login(login=login)
 
-    dataset = db.get_user_by_login(login=login)
+    dataset = orm.get_user_by_login(login=login)
     assert len(dataset) == 0
 
     api.mailhog.delete_all_messages()
 
-    dataset = db.get_user_by_login(login=login)
+    dataset = orm.get_user_by_login(login=login)
     for row in dataset:
         assert row['Login'] == login, f'User {login} not registered'
 
@@ -60,4 +61,5 @@ def test_put_v1_account_email():
          }
     )
                 )
+    orm.db.close_connection()
 

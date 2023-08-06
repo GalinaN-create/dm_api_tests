@@ -1,6 +1,7 @@
 import requests
 
 from generic.helpers.dm_db import DmDatabase
+from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
 import structlog
 from hamcrest import assert_that, has_properties
@@ -19,18 +20,18 @@ def test_get_v1_account():
     email = "admin918@test.ru"
     password = "admin918"
 
-    db = DmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
+    orm = OrmDatabase(user='postgres', password='admin', host='localhost', database='dm3.5')
 
-    db.delete_user_by_login(login=login)
+    orm.delete_user_by_login(login=login)
 
-    dataset = db.get_user_by_login(login=login)
+    dataset = orm.get_user_by_login(login=login)
     assert len(dataset) == 0
 
     api.mailhog.delete_all_messages()
 
-    dataset = db.get_user_by_login(login=login)
+    dataset = orm.get_user_by_login(login=login)
     for row in dataset:
-        assert row['Login'] == login, f'User {login} not registered'
+        assert row.Login == login, f'User {login} not registered'
 
     api.account.register_new_user(
         login=login,
@@ -51,4 +52,5 @@ def test_get_v1_account():
     api.account.set_headers(headers=token)
 
     response = api.account.get_current_user_info()
+    orm.db.close_connection()
     return response
