@@ -19,7 +19,6 @@ class AccountApi:
     def post_v1_account(
             self,
             json: Registration,
-            status_code: int = 201,
             **kwargs
     ) -> Response:
         """
@@ -34,7 +33,6 @@ class AccountApi:
             json=validate_request_json(json),
             **kwargs
         )
-        validate_status_code(response, status_code)
         return response
 
     def get_v1_account(

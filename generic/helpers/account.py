@@ -1,4 +1,5 @@
 from dm_api_account.models.registration_model import Registration
+from dm_api_account.utilities import validate_status_code
 from generic.helpers.mailhog import MailhogApi
 from dm_api_account.models.change_password_model import ChangePassword
 from dm_api_account.models.reset_password_model import ResetPassword
@@ -14,14 +15,22 @@ class Account:
     def set_headers(self, headers):
         self.facade.account_api.client.session.headers.update(headers)
 
-    def register_new_user(self, login: str, email: str, password: str):
+    def register_new_user(
+            self,
+            login: str,
+            email: str,
+            password: str,
+            status_code: int = 201,
+    ):
         response = self.facade.account_api.post_v1_account(
             json=Registration(
                 login=login,
                 email=email,
                 password=password
             )
+
         )
+        validate_status_code(response, status_code)
         return response
 
     def activate_registered_user(self, login: str):
