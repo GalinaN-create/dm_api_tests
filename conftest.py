@@ -1,6 +1,8 @@
 import pytest
 from vyper import v
 from pathlib import Path
+
+from generic.assertions.post_v1_account import AssertionsPostV1Account
 from generic.helpers.mailhog import MailhogApi
 from generic.helpers.orm_db import OrmDatabase
 from services.dm_api_account import Facade
@@ -18,6 +20,10 @@ options = (
     'services.mailhog',
     'database.dm3_5.host'
 )
+
+@pytest.fixture
+def assertions(orm_db):
+    return AssertionsPostV1Account(orm_db)
 
 
 @pytest.fixture
