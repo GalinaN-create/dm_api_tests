@@ -91,6 +91,11 @@ class Restclient:
         )
         # Формирование curl по запросу
         curl = curlify.to_curl(response.request)
+        allure.attach(
+            curl,
+            name='curl',
+            attachment_type=allure.attachment_type.TEXT
+        )
         print(curl)
         # Подробный ответ (запуск курла)
         log.msg(

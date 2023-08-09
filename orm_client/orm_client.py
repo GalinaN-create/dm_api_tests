@@ -1,8 +1,25 @@
+import json
 import uuid
 
+import allure
 import records
+import requests
 import structlog
 from sqlalchemy import create_engine
+
+
+def allure_attach(fn):
+    def wrapper(*args, **kwargs):
+        body = kwargs.get('str')
+        if body:
+            allure.attach(
+                json.dumps(kwargs.get('str'), indent=2),
+                name='request',
+                attachment_type=allure.attachment_type.__str__()
+            )
+        response = fn(*args, **kwargs)
+        return response
+    return wrapper
 
 
 class OrmClient:
@@ -16,6 +33,7 @@ class OrmClient:
     def close_connection(self):
         self.db.close()
 
+    @allure_attach
     def sent_query(self, query):
         print(query)
         log = self.log.bind(event_id=str(uuid.uuid4()))
@@ -32,6 +50,7 @@ class OrmClient:
         return result
         print(result)
 
+    @allure_attach
     def sent_bulk_query(self, query):
         print(query)
         log = self.log.bind(event_id=str(uuid.uuid4()))

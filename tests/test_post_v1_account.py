@@ -13,8 +13,10 @@ def random_string(begin=1, end=10):
     return string
 
 
+@allure.suite('Проверка создания и активации пользователя')
+@allure.sub_suite('Создание и активация пользователя')
 class TestsPostV1Account:
-    @allure.title('Проверка создания и активации пользователя')
+    @allure.title('Позитивная роверка создания и активации пользователя')
     def test_post_v1_account(
             self,
             dm_api_facade,
@@ -56,7 +58,7 @@ class TestsPostV1Account:
         ('!!!', '!!!!!!!.!!', '!!!!!!', 400, {'Email': ['Invalid']}),  # Валидация эмейла
         ('', '22@12.ru', '222222', 400, {'Login': ['Empty', 'Short']}),  # Пустое поле логин
     ])
-    @allure.title('Позитивные и негативные проверки на создание и активацию пользователя')
+    @allure.title('Позитивные и негативные проверки создания и активации пользователя')
     def test_create_and_activated_user_with_random_params(
             self,
             dm_api_facade,

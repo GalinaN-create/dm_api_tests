@@ -3,7 +3,8 @@ from hamcrest import assert_that, has_properties, instance_of
 from dm_api_account.models.user_envelope import UserRole
 
 
-@allure.title('Проверка смены пароля зареганного опльзователя')
+@allure.suite('Проверка смены пароля зареганного пользователя')
+@allure.title('Смена пароля зареганного пользователя')
 def test_put_v1_account_password(dm_api_facade, orm_db, prepare_user, assertions):
     """
     Тест проверяет возможность изменения пароля у зарегистрированного пользователя через БД

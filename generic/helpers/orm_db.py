@@ -7,6 +7,8 @@ from generic.helpers.orm_models import User
 from orm_client.orm_client import OrmClient
 
 
+@allure.suite('Получение данных из БД')
+@allure.title('Данные из БД')
 class OrmDatabase:
     def __init__(self, user, password, host, database):
         self.db = OrmClient(user, password, host, database)
@@ -40,4 +42,3 @@ class OrmDatabase:
                 Activated=True
             )
         self.db.sent_bulk_query(query)
-

@@ -15,7 +15,8 @@ class Account:
 
     # Проставление заголовков в клиент
     def set_headers(self, headers):
-        self.facade.account_api.client.session.headers.update(headers)
+        with allure.step('Проставление заголовков в клиент'):
+            self.facade.account_api.client.session.headers.update(headers)
 
     def register_new_user(
             self,

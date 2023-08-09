@@ -21,6 +21,7 @@ options = (
     'database.dm3_5.host'
 )
 
+
 @pytest.fixture
 def assertions(orm_db):
     return AssertionsPostV1Account(orm_db)

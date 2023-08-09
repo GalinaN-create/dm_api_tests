@@ -67,9 +67,10 @@ class LoginApi:
         Logout from every device
         :return:
         """
-        response = self.client.delete(
-            path=f"/v1/account/login/all",
-            **kwargs
-        )
+        with allure.step('Выход из всех аккаунтов'):
+            response = self.client.delete(
+                path=f"/v1/account/login/all",
+                **kwargs
+            )
         validate_status_code(response, status_code)
         return response

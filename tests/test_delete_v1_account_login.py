@@ -1,7 +1,8 @@
 import allure
 
 
-@allure.title('Проверка выхода из системы у текущего пользователя')
+@allure.suite('Проверка выхода из системы у текущего пользователя')
+@allure.title('Выход из системы у текущего пользователя')
 def test_delete_v1_account_login(dm_api_facade, orm_db, prepare_user, assertions):
     """
     Тест проверяет выход из системы у текущего пользователя
