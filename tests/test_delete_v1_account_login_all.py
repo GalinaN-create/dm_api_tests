@@ -1,4 +1,7 @@
+import allure
 
+
+@allure.title('Проверка выхода из системы со всех устройств')
 def test_delete_v1_account_login_all(dm_api_facade, orm_db, prepare_user, assertions):
     """
     Тест проверяет выход из системы со всех устройств

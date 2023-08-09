@@ -1,6 +1,7 @@
 import json
 import time
 
+import allure
 from requests import Response
 from restclient.restclient import Restclient
 
@@ -51,6 +52,7 @@ class MailhogApi:
         return token
 
     def get_token_by_reset_password(self, login: str, attempt=5):
+
         if attempt == 0:
             raise AssertionError(f'Не удалось получить письмо с логином {login}')
 

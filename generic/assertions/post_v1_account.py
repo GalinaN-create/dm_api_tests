@@ -1,3 +1,5 @@
+import allure
+
 from generic.helpers.orm_db import OrmDatabase
 
 
@@ -7,12 +9,14 @@ class AssertionsPostV1Account:
         self.orm = orm
 
     def check_user_was_created(self, login):
-        dataset = self.orm.get_user_by_login(login=login)
-        for row in dataset:
-            assert row.Login == login, f'User {login} registered'
-            assert row.Activated is False, f'User {login} was not activated'
+        with allure.step('Проверка, что новый пользователь был ссоздан'):
+            dataset = self.orm.get_user_by_login(login=login)
+            for row in dataset:
+                assert row.Login == login, f'User {login} registered'
+                assert row.Activated is False, f'User {login} was not activated'
 
     def check_user_was_activated(self, login):
-        dataset = self.orm.get_user_by_login(login=login)
-        for row in dataset:
-            assert row.Activated is True, f'User {login} not activated'
+        with allure.step('Проверка активации нового пользователя'):
+            dataset = self.orm.get_user_by_login(login=login)
+            for row in dataset:
+                assert row.Activated is True, f'User {login} not activated'

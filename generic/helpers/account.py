@@ -1,3 +1,5 @@
+import allure
+
 from dm_api_account.models.registration_model import Registration
 from dm_api_account.utilities import validate_status_code
 from generic.helpers.mailhog import MailhogApi
@@ -34,10 +36,11 @@ class Account:
         return response
 
     def activate_registered_user(self, login: str):
-        token = self.facade.mailhog.get_token_by_login(login=login)
-        response = self.facade.account_api.put_v1_account_token(
-            token=token
-        )
+        with allure.step('Активация нового пользователя'):
+            token = self.facade.mailhog.get_token_by_login(login=login)
+            response = self.facade.account_api.put_v1_account_token(
+                token=token
+            )
         return response
 
     def get_current_user_info(self, **kwargs):
@@ -45,32 +48,35 @@ class Account:
         return response
 
     def reset_password(self, login: str, email: str):
-        response = self.facade.account_api.post_v1_account_password(
-            json=ResetPassword(
-                login=login,
-                email=email
+        with allure.step('Сброс пароля'):
+            response = self.facade.account_api.post_v1_account_password(
+                json=ResetPassword(
+                    login=login,
+                    email=email
+                )
             )
-        )
         return response
 
     def change_password(self, login: str, oldPassword: str, newPassword: str):
-        token = self.facade.mailhog.get_token_by_reset_password(login=login)
-        response = self.facade.account_api.put_v1_account_password(
-            json=ChangePassword(
-                login=login,
-                token=token,
-                oldPassword=oldPassword,
-                newPassword=newPassword
+        with allure.step('Смена пароля'):
+            token = self.facade.mailhog.get_token_by_reset_password(login=login)
+            response = self.facade.account_api.put_v1_account_password(
+                json=ChangePassword(
+                    login=login,
+                    token=token,
+                    oldPassword=oldPassword,
+                    newPassword=newPassword
+                )
             )
-        )
         return response
 
     def change_email(self, login: str, password: str, email: str):
-        response = self.facade.account_api.put_v1_account_email(
-            json=ChangeEmail(
-                login=login,
-                password=password,
-                email=email
+        with allure.step('Сброс почты'):
+            response = self.facade.account_api.put_v1_account_email(
+                json=ChangeEmail(
+                    login=login,
+                    password=password,
+                    email=email
+                )
             )
-        )
         return response

@@ -1,7 +1,9 @@
+import allure
 from dm_api_account.models.user_envelope import UserRole
 from hamcrest import assert_that, has_properties, instance_of
 
 
+@allure.title('Проверка активации пользователя')
 def test_put_v1_account_token(dm_api_facade, orm_db, prepare_user, assertions):
     """
     Тест проверяет создание и активацию нового пользователя через БД

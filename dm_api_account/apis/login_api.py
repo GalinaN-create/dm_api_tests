@@ -1,3 +1,4 @@
+import allure
 import requests
 
 from requests import Response
@@ -28,11 +29,12 @@ class LoginApi:
         :return:
         """
 
-        response = self.client.post(
-            path=f"/v1/account/login",
-            json=validate_request_json(json),
-            **kwargs
-        )
+        with allure.step('Аутентификация нового пользователя'):
+            response = self.client.post(
+                path=f"/v1/account/login",
+                json=validate_request_json(json),
+                **kwargs
+            )
         validate_status_code(response, status_code)
         if response.status_code == 200:
             UserEnvelope(**response.json())
@@ -48,10 +50,11 @@ class LoginApi:
         :return:
         """
 
-        response = self.client.delete(
-            path=f"/v1/account/login",
-            **kwargs
-        )
+        with allure.step('Удаление пользователя'):
+            response = self.client.delete(
+                path=f"/v1/account/login",
+                **kwargs
+            )
         validate_status_code(response, status_code)
         return response
 
@@ -64,7 +67,6 @@ class LoginApi:
         Logout from every device
         :return:
         """
-
         response = self.client.delete(
             path=f"/v1/account/login/all",
             **kwargs

@@ -1,6 +1,8 @@
+import allure
 from hamcrest import assert_that, has_entries
 
 
+@allure.title('Проверка авторизации активированного пользователя')
 def test_post_v1_account_login(dm_api_facade, orm_db, prepare_user, assertions):
     """
     Тест проверяет создание, активацию и авторизацию пользователя в БД

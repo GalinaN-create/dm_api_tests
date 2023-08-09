@@ -1,4 +1,7 @@
+import allure
 
+
+@allure.title('Проверка выхода из системы у текущего пользователя')
 def test_delete_v1_account_login(dm_api_facade, orm_db, prepare_user, assertions):
     """
     Тест проверяет выход из системы у текущего пользователя
@@ -25,4 +28,3 @@ def test_delete_v1_account_login(dm_api_facade, orm_db, prepare_user, assertions
     dm_api_facade.login.set_headers(headers=token)
     dm_api_facade.login.logout_user(headers=token)
     orm_db.db.close_connection()
-

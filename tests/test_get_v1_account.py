@@ -1,4 +1,7 @@
+import allure
 
+
+@allure.title('Проверка получения активированного пользователя')
 def test_get_v1_account(dm_api_facade, orm_db, prepare_user, assertions):
     """
     Тест проверяет создание, активацию и получение созданного пользователя

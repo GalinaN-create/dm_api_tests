@@ -1,3 +1,4 @@
+import allure
 import pytest
 from hamcrest import assert_that, has_entries
 from string import ascii_letters, digits
@@ -13,7 +14,7 @@ def random_string(begin=1, end=10):
 
 
 class TestsPostV1Account:
-
+    @allure.title('Проверка создания и активации пользователя')
     def test_post_v1_account(
             self,
             dm_api_facade,
@@ -27,16 +28,11 @@ class TestsPostV1Account:
 
         orm_db.delete_user_by_login(login=login)
         dm_api_facade.mailhog.delete_all_messages()
-
         dm_api_facade.account.register_new_user(login=login, email=email, password=password)
         assertions.check_user_was_created(login=login)
-
         # api.account.activate_registered_user(login=login)
-
         orm_db.activated_new_user(login=login)
-
         assertions.check_user_was_activated(login=login)
-
         response = dm_api_facade.login.login_user(login=login, password=password)
 
         assert_that(response.json()['resource'], has_entries(
@@ -60,6 +56,7 @@ class TestsPostV1Account:
         ('!!!', '!!!!!!!.!!', '!!!!!!', 400, {'Email': ['Invalid']}),  # Валидация эмейла
         ('', '22@12.ru', '222222', 400, {'Login': ['Empty', 'Short']}),  # Пустое поле логин
     ])
+    @allure.title('Позитивные и негативные проверки на создание и активацию пользователя')
     def test_create_and_activated_user_with_random_params(
             self,
             dm_api_facade,
@@ -78,15 +75,11 @@ class TestsPostV1Account:
 
         response = dm_api_facade.account.register_new_user(login=login, email=email, password=password,
                                                            status_code=status_code)
-
         if status_code == 201:
             assertions.check_user_was_created(login=login)
-
             # api.account.activate_registered_user(login=login)
             orm_db.activated_new_user(login=login)
-
             assertions.check_user_was_activated(login=login)
-
             dm_api_facade.login.login_user(login=login, password=password)
         else:
             assert response.json()['errors'] == check, f'поле {check}  не соответствует ответу в ошибке'

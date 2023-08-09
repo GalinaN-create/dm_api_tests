@@ -1,7 +1,9 @@
+import allure
 from hamcrest import assert_that, has_properties, instance_of
 from dm_api_account.models.user_envelope import UserRole
 
 
+@allure.title('Проверка смены почты зареганного пользователя')
 def test_put_v1_account_email(dm_api_facade, orm_db, prepare_user, assertions):
     """
     Тест проверяет изменение адреса электронной почты зарегистрированного пользователя

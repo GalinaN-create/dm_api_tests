@@ -1,6 +1,8 @@
+import allure
 from hamcrest import assert_that, has_entries
 
 
+@allure.title('Проверка сброса пароля зареганного пользователя')
 def test_post_v1_account_password(dm_api_facade, orm_db, prepare_user, assertions):
     """
     Тест проверяет создание, активацию и сброс пароля активированного пользователя
