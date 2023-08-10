@@ -1,4 +1,5 @@
 import pytest
+from requests import request
 from vyper import v
 from pathlib import Path
 
@@ -66,12 +67,18 @@ def dm_api_facade(mailhog):
     return Facade(host=v.get('service.dm_api_account'), mailhog=mailhog)
 
 
-@pytest.fixture
-def orm_db():
-    orm = OrmDatabase(
+
+
+
+@pytest.fixture()
+def orm_db(request):
+
+    connect = OrmDatabase(
         user=v.get('database.dm3_5.user'),
         password=v.get('database.dm3_5.password'),
         host=v.get('database.dm3_5.host'),
         database=v.get('database.dm3_5.database')
     )
-    return orm
+    request.addfinalizer(connect.db.db.close)
+    return connect
+

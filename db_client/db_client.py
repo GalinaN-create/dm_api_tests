@@ -7,34 +7,26 @@ import requests
 import structlog
 
 
-def allure_attach(fn):
+def allure_attach_db(fn):
     def wrapper(*args, **kwargs):
-        body = kwargs.get('json')
-        if body:
+        query = kwargs.get('query')
+        if query:
             allure.attach(
-                json.dumps(kwargs.get('json'), indent=2),
-                name='request',
-                attachment_type=allure.attachment_type.JSON
+                query,
+                name='db_request',
+                attachment_type=allure.attachment_type.TEXT
             )
         response = fn(*args, **kwargs)
         try:
-            response_json = response.json()
-        except requests.exceptions.JSONDecodeError:
-            response_text = response.text
-            status_code = f'< status_code {response.status_code}>'
-            allure.attach(
-                response_text if len(response_text) > 0 else status_code,
-                name='response',
-                attachment_type=allure.attachment_type.TEXT
-            )
-        else:
-            allure.attach(
-                json.dumps(response_json, indent=2),
-                name='request',
-                attachment_type=allure.attachment_type.JSON
-            )
+            dataset = response.as_dict()
+        except AttributeError:
+            return response
+        allure.attach(
+            json.dumps(dataset, indent=2),
+            name='db_response',
+            attachment_type=allure.attachment_type.JSON
+        )
         return response
-
     return wrapper
 
 
@@ -44,22 +36,29 @@ class DbClient:
         self.db = records.Database(connection_string, isolation_level=isolation_level)
         self.log = structlog.get_logger(self.__class__.__name__).bind(service="db")
 
-    @allure_attach
+# Метод для выполнения sql запроса к бд
+    @allure_attach_db
     def sent_query(self, query):
+    # Печать переданного запроса
         print(query)
+    # Создание логгера с уникальным айди события
         log = self.log.bind(event_id=str(uuid.uuid4()))
+    # Записывается информация в логгер о событии реквест с переданным запросом
         log.msg(
             event='request',
             query=query
         )
+    # Выполняется sql запрос с использованием обьекта self.db и результат представляется в виде словаря датасет
         dataset = self.db.query(query=query).as_dict()
+    # В логгере записывается информация о событии респонс с полученным набором данных датасет
         log.msg(
             event='response',
             dataset=dataset
         )
+    # Возвращается полученный датасет
         return dataset
 
-    @allure_attach
+    @allure_attach_db
     def sent_bulk_query(self, query):
         print(query)
         log = self.log.bind(event_id=str(uuid.uuid4()))
