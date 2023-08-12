@@ -1,10 +1,10 @@
 from typing import List
 
 import allure
-from sqlalchemy import select, update, delete
+from sqlalchemy import select, update
 from generic.helpers.orm_models import User
 
-from orm_client.orm_client import OrmClient
+from common_libs.orm_client.orm_client import OrmClient
 
 
 @allure.suite('Получение данных из БД')

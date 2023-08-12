@@ -6,7 +6,6 @@ import records
 import requests
 import structlog
 from sqlalchemy import create_engine
-from sqlalchemy.engine import LegacyRow
 
 
 def allure_attach_orm(fn):

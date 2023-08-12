@@ -1,5 +1,5 @@
 import allure
-from dm_api_account.models.user_envelope import UserRole
+from apis.dm_api_account.models.user_envelope import UserRole
 from hamcrest import assert_that, has_properties, instance_of
 
 
