@@ -1,3 +1,5 @@
+git+https://github.com/GalinaN-create/orm_client.git
+git+https://github.com/GalinaN-create/restclient.git
 requests~=2.31.0
 pytest~=7.3.2
 structlog~=23.1.0
