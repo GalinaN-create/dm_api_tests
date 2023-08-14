@@ -1,6 +1,6 @@
 import allure
 from hamcrest import assert_that, has_properties, instance_of
-from dm_api_account.models.user_envelope import UserRole
+from dm_api_account.models import UserRole
 
 
 @allure.suite('Проверка смены пароля зареганного пользователя')

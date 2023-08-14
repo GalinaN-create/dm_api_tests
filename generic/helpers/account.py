@@ -1,10 +1,10 @@
 import allure
 
-from dm_api_account.models.registration_model import Registration
+from dm_api_account.models import Registration
 from dm_api_account.utilities import validate_status_code
-from dm_api_account.models.change_password_model import ChangePassword
-from dm_api_account.models.reset_password_model import ResetPassword
-from dm_api_account.models.change_email_model import ChangeEmail
+from dm_api_account.models import ChangePassword
+from dm_api_account.models import ResetPassword
+from dm_api_account.models import ChangeEmail
 
 
 class Account:
@@ -24,8 +24,8 @@ class Account:
             password: str,
             status_code: int = 201,
     ):
-        response = self.facade.account_api.post_v1_account(
-            json=Registration(
+        response = self.facade.account_api.register(
+            registration=Registration(
                 login=login,
                 email=email,
                 password=password
@@ -38,7 +38,7 @@ class Account:
     def activate_registered_user(self, login: str):
         with allure.step('Активация нового пользователя'):
             token = self.facade.mailhog.get_token_by_login(login=login)
-            response = self.facade.account_api.put_v1_account_token(
+            response = self.facade.account_api.activate(
                 token=token
             )
         return response
