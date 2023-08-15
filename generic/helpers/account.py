@@ -15,7 +15,7 @@ class Account:
     # Проставление заголовков в клиент
     def set_headers(self, headers):
         with allure.step('Проставление заголовков в клиент'):
-            self.facade.account_api.api_client.default_headers.update()
+            self.facade.account_api.api_client.default_headers.update(headers)
 
     def register_new_user(
             self,
@@ -42,7 +42,7 @@ class Account:
         return response
 
     def get_current_user_info(self, **kwargs):
-        response = self.facade.account_api.get_v1_account(**kwargs)
+        response = self.facade.account_api.get_current(**kwargs)
         return response
 
     def reset_password(self, login: str, email: str):

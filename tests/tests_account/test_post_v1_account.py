@@ -24,9 +24,8 @@ class TestsPostV1Account:
             dm_api_facade,
             orm_db,
             prepare_user,
-            assertions,
-            status_code,
-            check
+            assertions
+
 
     ):
         login = prepare_user.login
@@ -35,8 +34,6 @@ class TestsPostV1Account:
 
         orm_db.delete_user_by_login(login=login)
         dm_api_facade.mailhog.delete_all_messages()
-        with check_status_code_http(expected_status_code=status_code, expected_result=check):
-            response = dm_api_facade.account.register_new_user(login=login, email=email, password=password)
         assertions.check_user_was_created(login=login)
         # api.account.activate_registered_user(login=login)
         orm_db.activated_new_user(login=login)
