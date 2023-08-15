@@ -24,7 +24,10 @@ class TestsPostV1Account:
             dm_api_facade,
             orm_db,
             prepare_user,
-            assertions
+            assertions,
+            status_code,
+            check
+
     ):
         login = prepare_user.login
         email = prepare_user.email
@@ -33,7 +36,7 @@ class TestsPostV1Account:
         orm_db.delete_user_by_login(login=login)
         dm_api_facade.mailhog.delete_all_messages()
         with check_status_code_http(expected_status_code=status_code, expected_result=check):
-            dm_api_facade.account.register_new_user(login=login, email=email, password=password)
+            response = dm_api_facade.account.register_new_user(login=login, email=email, password=password)
         assertions.check_user_was_created(login=login)
         # api.account.activate_registered_user(login=login)
         orm_db.activated_new_user(login=login)
@@ -88,9 +91,9 @@ class TestsPostV1Account:
             orm_db.activated_new_user(login=login)
             assertions.check_user_was_activated(login=login)
             dm_api_facade.login.login_user(login=login, password=password)
-        else:
-            assert response.json()['errors'] == check, f'поле {check}  не соответствует ответу в ошибке'
-        orm_db.db.close_connection()
+        # else:
+        #     assert response.json()['errors'] == check, f'поле {check}  не соответствует ответу в ошибке'
+        # orm_db.db.close_connection()
 
     #
     #

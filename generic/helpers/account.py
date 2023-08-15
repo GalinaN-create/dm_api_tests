@@ -15,7 +15,7 @@ class Account:
     # Проставление заголовков в клиент
     def set_headers(self, headers):
         with allure.step('Проставление заголовков в клиент'):
-            self.facade.account_api.client.session.headers.update(headers)
+            self.facade.account_api.api_client.default_headers.update()
 
     def register_new_user(
             self,
@@ -47,7 +47,7 @@ class Account:
 
     def reset_password(self, login: str, email: str):
         with allure.step('Сброс пароля'):
-            response = self.facade.account_api.post_v1_account_password(
+            response = self.facade.account_api.reset_password(
                 json=ResetPassword(
                     login=login,
                     email=email
@@ -58,7 +58,7 @@ class Account:
     def change_password(self, login: str, oldPassword: str, newPassword: str):
         with allure.step('Смена пароля'):
             token = self.facade.mailhog.get_token_by_reset_password(login=login)
-            response = self.facade.account_api.put_v1_account_password(
+            response = self.facade.account_api.change_password(
                 json=ChangePassword(
                     login=login,
                     token=token,
@@ -70,7 +70,7 @@ class Account:
 
     def change_email(self, login: str, password: str, email: str):
         with allure.step('Сброс почты'):
-            response = self.facade.account_api.put_v1_account_email(
+            response = self.facade.account_api.change_email(
                 json=ChangeEmail(
                     login=login,
                     password=password,
