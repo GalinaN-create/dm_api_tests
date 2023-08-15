@@ -1,7 +1,7 @@
 import allure
 
 from dm_api_account.models import Registration
-from dm_api_account.utilities import validate_status_code
+
 from dm_api_account.models import ChangePassword
 from dm_api_account.models import ResetPassword
 from dm_api_account.models import ChangeEmail
@@ -21,8 +21,7 @@ class Account:
             self,
             login: str,
             email: str,
-            password: str,
-            status_code: int = 201,
+            password: str
     ):
         response = self.facade.account_api.register(
             registration=Registration(
@@ -32,7 +31,6 @@ class Account:
             )
 
         )
-        validate_status_code(response, status_code)
         return response
 
     def activate_registered_user(self, login: str):
