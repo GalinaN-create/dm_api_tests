@@ -1,3 +1,4 @@
+import grpc
 import pytest
 from requests import request
 from vyper import v
@@ -10,7 +11,8 @@ from generic.helpers.search import Search
 from services.dm_api_account import Facade
 import structlog
 from collections import namedtuple
-
+from apis.dm_api_search_async import SearchEngineStub
+from grpclib.client import Channel
 structlog.configure(
     processors=[
         structlog.processors.JSONRenderer(indent=4, sort_keys=True, ensure_ascii=False)
@@ -23,12 +25,20 @@ options = (
     'database.dm3_5.host'
 )
 
+
 @pytest.fixture
 def grpc_search():
     client = Search(target='localhost:5052')
     yield client
     client.close()
 
+
+@pytest.fixture
+def grpc_search_async():
+    channel = Channel(host='localhost', port=5052)
+    client = SearchEngineStub(channel)
+    yield client
+    channel.close()
 
 
 @pytest.fixture
