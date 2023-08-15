@@ -6,6 +6,7 @@ from data.post_v1_account import PostV1AccountData as user_data
 from generic.assertions.post_v1_account import AssertionsPostV1Account
 from generic.helpers.mailhog import MailhogApi
 from generic.helpers.orm_db import OrmDatabase
+from generic.helpers.search import Search
 from services.dm_api_account import Facade
 import structlog
 from collections import namedtuple
@@ -21,6 +22,13 @@ options = (
     'services.mailhog',
     'database.dm3_5.host'
 )
+
+@pytest.fixture
+def grpc_search():
+    client = Search(target='localhost:5052')
+    yield client
+    client.close()
+
 
 
 @pytest.fixture
@@ -67,12 +75,8 @@ def dm_api_facade(mailhog):
     return Facade(host=v.get('service.dm_api_account'), mailhog=mailhog)
 
 
-
-
-
 @pytest.fixture()
 def orm_db(request):
-
     connect = OrmDatabase(
         user=v.get('database.dm3_5.user'),
         password=v.get('database.dm3_5.password'),
@@ -81,4 +85,3 @@ def orm_db(request):
     )
     request.addfinalizer(connect.db.db.close)
     return connect
-
