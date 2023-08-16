@@ -48,7 +48,7 @@ class Account:
     def reset_password(self, login: str, email: str):
         with allure.step('Сброс пароля'):
             response = self.facade.account_api.reset_password(
-                json=ResetPassword(
+                reset_password=ResetPassword(
                     login=login,
                     email=email
                 )
@@ -59,11 +59,11 @@ class Account:
         with allure.step('Смена пароля'):
             token = self.facade.mailhog.get_token_by_reset_password(login=login)
             response = self.facade.account_api.change_password(
-                json=ChangePassword(
+                change_password=ChangePassword(
                     login=login,
                     token=token,
-                    oldPassword=oldPassword,
-                    newPassword=newPassword
+                    old_password=oldPassword,
+                    new_password=newPassword
                 )
             )
         return response
@@ -71,7 +71,7 @@ class Account:
     def change_email(self, login: str, password: str, email: str):
         with allure.step('Сброс почты'):
             response = self.facade.account_api.change_email(
-                json=ChangeEmail(
+                change_email=ChangeEmail(
                     login=login,
                     password=password,
                     email=email

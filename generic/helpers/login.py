@@ -29,12 +29,14 @@ class Login:
     def get_auth_token(self, login: str, password: str, remember_me: bool = True):
         with allure.step('Получение авторизационного токена'):
             response = self.login_user(login=login, password=password, remember_me=remember_me)
-            token = {'X-Dm-Auth-Token': response.headers['X-Dm-Auth-Token']}
+            print(response)
+            token = {'X-Dm-Auth-Token': response[2]['X-Dm-Auth-Token']}
         return token
 
     def logout_user(self, **kwargs):
         with allure.step('Разлогинивание пользователя'):
             response = self.facade.login_api.v1_account_login_delete(**kwargs)
+
         return response
 
     def logout_user_from_all_devices(self, **kwargs):

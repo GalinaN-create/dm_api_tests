@@ -34,9 +34,11 @@ class TestsPostV1Account:
 
         orm_db.delete_user_by_login(login=login)
         dm_api_facade.mailhog.delete_all_messages()
-        assertions.check_user_was_created(login=login)
+        create = assertions.check_user_was_created(login=login)
+        print(create)
         # api.account.activate_registered_user(login=login)
-        orm_db.activated_new_user(login=login)
+        activate = orm_db.activated_new_user(login=login)
+        print(activate)
         assertions.check_user_was_activated(login=login)
         response = dm_api_facade.login.login_user(login=login, password=password)
 
