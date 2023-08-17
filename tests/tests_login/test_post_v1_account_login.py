@@ -39,4 +39,4 @@ def test_post_v1_account_login(dm_api_facade, orm_db, prepare_user, assertions):
 
         }
     ))
-    orm_db.db.close_connection()
+

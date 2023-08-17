@@ -90,7 +90,7 @@ class TestsPostV1Account:
             dm_api_facade.login.login_user(login=login, password=password)
         # else:
         #     assert response.json()['errors'] == check, f'поле {check}  не соответствует ответу в ошибке'
-        orm_db.db.close_connection()
+
 
     #
     #

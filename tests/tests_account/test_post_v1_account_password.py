@@ -44,4 +44,4 @@ def test_post_v1_account_password(dm_api_facade, orm_db, prepare_user, assertion
         "quantity": 0
     }))
 
-    orm_db.db.close_connection()
+

@@ -38,4 +38,4 @@ def test_delete_v1_account_login_all(dm_api_facade, orm_db, prepare_user, assert
     dm_api_facade.login.logout_user_from_all_devices(
         headers=token
     )
-    orm_db.db.close_connection()
+

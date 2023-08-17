@@ -51,4 +51,4 @@ def test_put_v1_account_password(dm_api_facade, orm_db, prepare_user, assertions
         "quality": 0,
         "quantity": 0
     }))
-    orm_db.db.close_connection()
+

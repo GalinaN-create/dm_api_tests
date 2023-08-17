@@ -30,5 +30,5 @@ def test_get_v1_account(dm_api_facade, orm_db, prepare_user, assertions):
     token = dm_api_facade.login.get_auth_token(login=login, password=password)
     dm_api_facade.account.set_headers(headers=token)
     response = dm_api_facade.account.get_current_user_info(x_dm_auth_token=token)
-    orm_db.db.close_connection()
+
     return response
