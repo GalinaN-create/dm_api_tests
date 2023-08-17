@@ -1,5 +1,5 @@
 import allure
-from hamcrest import assert_that, has_entries
+from hamcrest import assert_that, has_entries, equal_to, all_of, contains_inanyorder
 
 
 @allure.suite('Проверка сброса пароля зареганного пользователя')
@@ -32,17 +32,16 @@ def test_post_v1_account_password(dm_api_facade, orm_db, prepare_user, assertion
         login=login,
         email=email
     )
-    print(response)
-    # assert_that(response.resource, has_entries(
-    #     {
-    #         "login": "admin1",
-    #         "roles": ["Guest", "Player"],
-    #         "rating": ({
-    #             "enabled": True,
-    #             "quality": 0,
-    #             "quantity": 0
-    #         })
-    #
-    #     }
-    # ))
-    # orm_db.db.close_connection()
+
+    assert_that(response['resource']['login'], equal_to("admin1"))
+
+    roles_list = [str(role) for role in response['resource']['roles']]
+    assert_that(roles_list, equal_to(['Guest', 'Player']))
+
+    assert_that(response['resource']['rating'], has_entries({
+        "enabled": True,
+        "quality": 0,
+        "quantity": 0
+    }))
+
+    orm_db.db.close_connection()

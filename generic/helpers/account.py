@@ -55,15 +55,15 @@ class Account:
             )
         return response
 
-    def change_password(self, login: str, oldPassword: str, newPassword: str):
+    def change_password(self, login: str, old_password: str, new_password: str):
         with allure.step('Смена пароля'):
             token = self.facade.mailhog.get_token_by_reset_password(login=login)
             response = self.facade.account_api.change_password(
                 change_password=ChangePassword(
                     login=login,
                     token=token,
-                    old_password=oldPassword,
-                    new_password=newPassword
+                    old_password=old_password,
+                    new_password=new_password
                 )
             )
         return response

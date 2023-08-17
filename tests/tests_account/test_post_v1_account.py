@@ -34,11 +34,9 @@ class TestsPostV1Account:
 
         orm_db.delete_user_by_login(login=login)
         dm_api_facade.mailhog.delete_all_messages()
-        create = assertions.check_user_was_created(login=login)
-        print(create)
+        assertions.check_user_was_created(login=login)
         # api.account.activate_registered_user(login=login)
-        activate = orm_db.activated_new_user(login=login)
-        print(activate)
+        orm_db.activated_new_user(login=login)
         assertions.check_user_was_activated(login=login)
         response = dm_api_facade.login.login_user(login=login, password=password)
 
@@ -92,7 +90,7 @@ class TestsPostV1Account:
             dm_api_facade.login.login_user(login=login, password=password)
         # else:
         #     assert response.json()['errors'] == check, f'поле {check}  не соответствует ответу в ошибке'
-        # orm_db.db.close_connection()
+        orm_db.db.close_connection()
 
     #
     #

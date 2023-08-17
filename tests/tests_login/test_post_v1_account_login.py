@@ -1,5 +1,5 @@
 import allure
-from hamcrest import assert_that, has_entries
+from hamcrest import assert_that, has_entries, equal_to
 
 
 @allure.suite('Проверка авторизации активированного пользователя')
@@ -27,16 +27,16 @@ def test_post_v1_account_login(dm_api_facade, orm_db, prepare_user, assertions):
         password=password
     )
     print(response)
-    # assert_that(response.json()['resource'], has_entries(
-    #     {
-    #         "login": "admin1",
-    #         "roles": ["Guest", "Player"],
-    #         "rating": ({
-    #             "enabled": True,
-    #             "quality": 0,
-    #             "quantity": 0
-    #         })
-    #
-    #     }
-    # ))
-    # orm_db.db.close_connection()
+    assert_that(response['resource'], has_entries(
+        {
+            "login": "admin1",
+            "roles": ["Guest", "Player"],
+            "rating": ({
+                "enabled": True,
+                "quality": 0,
+                "quantity": 0
+            })
+
+        }
+    ))
+    orm_db.db.close_connection()

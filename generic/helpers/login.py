@@ -29,7 +29,6 @@ class Login:
     def get_auth_token(self, login: str, password: str, remember_me: bool = True):
         with allure.step('Получение авторизационного токена'):
             response = self.login_user(login=login, password=password, remember_me=remember_me)
-            print(response)
             token = {'X-Dm-Auth-Token': response[2]['X-Dm-Auth-Token']}
         return token
 

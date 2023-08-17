@@ -30,4 +30,4 @@ def test_delete_v1_account_login(dm_api_facade, orm_db, prepare_user, assertions
     response = dm_api_facade.login.logout_user(headers=token)
     print(response)
 
-    # orm_db.db.close_connection()
+    orm_db.db.close_connection()
